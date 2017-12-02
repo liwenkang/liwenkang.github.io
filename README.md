@@ -12,19 +12,31 @@ In spare time, I like reading book, surfing internet, listening music and having
 
 ## Project Links
 
-  1. A sell web application(using vue, webpack, node.js)  [code](https://github.com/liwenkang/ele.vue)
+&nbsp;1. A sell web application(using vue, webpack, node.js) 
 
-  2. A todo web application(using jQuery, bootrap, node.js)  [code](https://github.com/liwenkang/todoList).
+&nbsp;&nbsp;[code](https://github.com/liwenkang/ele.vue)
 
-  3. A small recommend-friends application  [code](https://github.com/liwenkang/recommend_friends)
+&nbsp;2. A todo web application(using jQuery, bootrap, node.js) 
 
-  4. A break_block web game  [code](https://github.com/liwenkang/break_block)  [demo](https://github.com/liwenkang/break_block)
+&nbsp;&nbsp;[code](https://github.com/liwenkang/todoList)
 
-  5. A small music-player web application  [code](https://github.com/liwenkang/music_Player)  [demo](https://liwenkang.github.io/music_Player)
+&nbsp;3. A small recommend-friends application 
+
+&nbsp;&nbsp;[code](https://github.com/liwenkang/recommend_friends)
+
+&nbsp;4. A break_block web game  
+
+&nbsp;&nbsp;[code](https://github.com/liwenkang/break_block)&nbsp;&nbsp;[demo](https://liwenkang.github.io//break_block)
+
+&nbsp;5. A small music-player web application  
+
+&nbsp;&nbsp;[code](https://github.com/liwenkang/music_Player)&nbsp;&nbsp;[demo](https://liwenkang.github.io/music_Player)
   
   
 ## Contact Infomation 
 
-838906334@qq.com
+email: 838906334@qq.com
 
-changzhiliwenkang@outlook.com
+wechat: 15706292371
+
+github: https://github.com/liwenkang/
