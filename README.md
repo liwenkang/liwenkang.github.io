@@ -12,15 +12,15 @@ In spare time, I like reading book, surfing internet, listening music and having
 
 ## Project Links
 
-1. A sell web application(using vue, webpack, node.js)  [code](https://github.com/liwenkang/ele.vue)
+  1. A sell web application(using vue, webpack, node.js)  [code](https://github.com/liwenkang/ele.vue)
 
-2. A todo web application(using jQuery, bootrap, node.js)  [code](https://github.com/liwenkang/todoList).
+  2. A todo web application(using jQuery, bootrap, node.js)  [code](https://github.com/liwenkang/todoList).
 
-3. A small recommend-friends application  [code](https://github.com/liwenkang/recommend_friends)
+  3. A small recommend-friends application  [code](https://github.com/liwenkang/recommend_friends)
 
-4. A break_block web game  [code](https://github.com/liwenkang/break_block)  [demo](https://github.com/liwenkang/break_block)
+  4. A break_block web game  [code](https://github.com/liwenkang/break_block)  [demo](https://github.com/liwenkang/break_block)
 
-5. A small music-player web application  [code](https://github.com/liwenkang/music_Player)  [demo](https://liwenkang.github.io/music_Player)
+  5. A small music-player web application  [code](https://github.com/liwenkang/music_Player)  [demo](https://liwenkang.github.io/music_Player)
   
   
 ## Contact Infomation 
