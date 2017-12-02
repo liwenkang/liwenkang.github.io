@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+# Welcome to My GitHub Page
 
-You can use the [editor on GitHub](https://github.com/liwenkang/liwenkang.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## About Me
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+My name is Li WenKang(李文康). You can call me K(^_^). I was born in 1996.
 
-### Markdown
+I am an IT noob focusing on web technology. I am looking for a job in front end development. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+I have a Bachelor of Engineering(Actually,I will have one next year), and once worked for a robot lab in my college as a developer in software and hardware.
 
-```markdown
-Syntax highlighted code block
+In spare time, I like reading book, surfing internet, listening music and having hot pot with my friends.
 
-# Header 1
-## Header 2
-### Header 3
+## Project Links
 
-- Bulleted
-- List
+1. A sell web application(using vue, webpack, node.js)  [code](https://github.com/liwenkang/ele.vue)
 
-1. Numbered
-2. List
+2. A todo web application(using jQuery, bootrap, node.js)  [code](https://github.com/liwenkang/todoList).
 
-**Bold** and _Italic_ and `Code` text
+3. A small recommend-friends application  [code](https://github.com/liwenkang/recommend_friends)
 
-[Link](url) and ![Image](src)
-```
+4. A break_block web game  [code](https://github.com/liwenkang/break_block)  [demo](https://github.com/liwenkang/break_block)
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+5. A small music-player web application  [code](https://github.com/liwenkang/music_Player)  [demo](https://liwenkang.github.io/music_Player)
+  
+  
+## Contact Infomation 
 
-### Jekyll Themes
+838906334@qq.com
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/liwenkang/liwenkang.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+changzhiliwenkang@outlook.com
