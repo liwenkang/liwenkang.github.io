@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /*
+        *  通过调整文字的 vertical-align, 配合 margin 使用
+        */
+        label, span {
+            display: inline-block;
+            padding: 0 10px;
+            vertical-align: middle;
+        }
+
+        input {
+            outline: none;
+            border: 1px solid rgb(216, 216, 216);
+            padding: 2px 10px 2px 10px;
+        }
+
+        input[type="text"] {
+            height: 14px;
+            line-height: 14px;
+            border-radius: 5px;
+            padding: 10px 10px;
+            vertical-align: middle;
+            color: #666;
+        }
+
+        input[type="button"] {
+            padding: 0px 10px;
+            height: 40px;
+        }
+
+        input[type="checkbox"] {
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="login-box" id="login-id">
+    <form id="login-form-id" class="login-form">
+        <p>
+            <label>帐号</label>
+            <input name="username" value="name" type="text" class="normal"/>
+            <span>输入用户帐号.</span>
+        </p>
+        <p>
+            <label>密码</label>
+            <input name="username" value="name" type="text" class="normal"/>
+            <span>输入用户密码.</span>
+        </p>
+        <p>
+            <input type="button" value="login"/>
+            <input type="button" value="cancel"/>
+        </p>
+        <p>
+            <label>西瓜</label><input type="checkbox" value="watermelon" name="fruit">
+            <label>梨</label><input type="checkbox" value="pale" name="fruit">
+            <label>苹果</label><input type="checkbox" value="apple" name="fruit">
+        </p>
+    </form>
+</div>
+
+
+<!--<form action="">-->
+<!--<input type="button" value="嘿嘿嘿"><span>按钮</span>-->
+
+<!--<hr>-->
+<!--<input type="checkbox" value="one" name="one">复选框-->
+<!--<input type="checkbox" value="two" name="twp">复选框-->
+<!--<input type="checkbox" value="three" name="three">复选框-->
+
+<!--<hr>-->
+<!--<input type="color">用于选择颜色-->
+<!--<hr>-->
+<!--<input type="date">输入日期: 年月日-->
+<!--<hr>-->
+<!--<input type="datetime">基于 UTC 时区的日期时间输入-->
+<!--<hr>-->
+<!--<input type="datetime-local">用于输入日期时间控件，不包含时区。-->
+<!--<hr>-->
+<!--<input type="email">用于编辑 e-mail 的字段。 合适的时候可以使用 :valid 和 :invalid CSS 伪类。-->
+<!--<hr>-->
+<!--<input type="file">此控件可以让用户选择文件。使用 accept 属性可以定义控件可以选择的文件类型。-->
+<!--<hr>-->
+<!--<input type="hidden">不显示在页面上的控件，但它的值会被提交到服务器。(可以用来提交默认值)-->
+<!--<hr>-->
+<!--<input type="image">图片提交按钮。必须使用 src 属性定义图片的来源及使用 alt 定义替代文本。还可以使用 height 和 width 属性以像素为单位定义图片的大小。-->
+<!--<hr>-->
+<!--<input type="month">用于输入年月的控件，不带时区。-->
+<!--<hr>-->
+<!--<input type="number">用于输入浮点数的控件。-->
+<!--<hr>-->
+<!--<input type="password">一个值被遮盖的单行文本字段。使用 maxlength 指定可以输入的值的最大长度。-->
+<!--<hr>-->
+<!--<input type="radio">单选按钮。必须使用 value 属性定义此控件被提交时的值。使用checked 必须指示控件是否缺省被选择。在同一个”单选按钮组“中，所有单选按钮的 name 属性使用同一个值；-->
+<!--一个单选按钮组中是，同一时间只有一个单选按钮可以被选择。-->
+<!--<hr>-->
+<!--<input type="range">用于输入不精确值控件。可以设置min, max, value, step-->
+<!--<hr>-->
+<!--<input type="reset">用于将表单所内容设置为缺省值的按钮。-->
+<!--<hr>-->
+<!--<input type="search">用于输入搜索字符串的单行文本字段。换行会被从输入的值中自动移除。-->
+<!--<hr>-->
+<!--<input type="submit">用于提交表单的按钮。-->
+<!--<hr>-->
+<!--<input type="tel">用于输入电话号码的控件；换行会被自动从输入的值中移除A，但不会执行其他语法。可以应用 :valid 和 :invalid CSS 伪类。-->
+<!--<hr>-->
+<!--<input type="text">单行字段；换行会将自动从输入的值中移除。-->
+<!--<hr>-->
+<!--<input type="time">用于输入不含时区的时间控件。-->
+<!--<hr>-->
+<!--<input type="url">用于编辑URL的字段。可以应用 :valid 和 :invalid CSS 伪类。-->
+<!--<hr>-->
+<!--<input type="week">用于输入一个由星期-年组成的日期，日期不包括时区。-->
+
+<!--</form>-->
+</body>
+</html>
