@@ -6,7 +6,7 @@ My name is Li WenKang(李文康). You can call me K(^_^). I was born in 1996.
 
 I am an IT noob focusing on web technology. I am looking for a job in front end development. 
 
-I have a Bachelor of Engineering(Actually,I will have one next year), and once worked for a robot lab in my college as a developer in software and hardware.
+I have a Bachelor of Engineering, and once worked for a robot lab in my college as a developer in software and hardware.
 
 In spare time, I like reading book, surfing internet, listening music and having hot pot with my friends.
 
