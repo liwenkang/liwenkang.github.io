@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .box {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%)
+        }
+
+        .oval {
+            position: relative;
+            width: 150px;
+            height: 90px;
+            background-image: url(greenToGray.png);
+            background-repeat: no-repeat;
+            background-position: -650px 0;
+            border-radius: 9999px;
+            transition-property: background-position;
+            transition-duration: 1.4s;
+            transition-timing-function: linear;
+        }
+
+        .round {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 75px;
+            height: 75px;
+            background-color: #ffffff;
+            border-radius: 9999px;
+            transition-property: left;
+            transition-duration: 1s;
+            transition-timing-function: linear;
+        }
+
+        .round:active {
+            left: 68px;
+        }
+
+        .oval:active {
+            background-position: 0 0;
+        }
+
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="oval">
+        <div class="round"></div>
+    </div>
+</div>
+</body>
+</html>
