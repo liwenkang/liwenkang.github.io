@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input {
+            padding: 0;
+            border: none;
+        }
+
+        .box {
+            display: flex;
+            margin: 10px;
+            width: 500px;
+            background-color: lightblue;
+            border: 1px solid lightblue;
+        }
+
+        .input {
+            flex: 1;
+        }
+
+        .input-info {
+            padding: 20px;
+        }
+
+        .table {
+            display: table;
+            box-sizing: border-box;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        body .table-hover tbody tr:hover {
+            background-color: lightcoral;
+        }
+
+        .table-bordered tbody tr th, .table-bordered tbody tr td {
+            border: 1px solid #DDDDDD;
+        }
+
+        .table-striped tbody tr:nth-of-type(2n+1) {
+            background-color: lightgreen;
+        }
+
+        .table-responsive thead th, .table-responsive tbody td {
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow: auto;
+        }
+
+    </style>
+</head>
+<body>
+<div class="box">
+    <label class="input-info" for="name">请输入你的姓名</label>
+    <input class="input" id="name">
+</div>
+
+<div class="box">
+    <input class="input" id="age">
+    <label class="input-info" for="age">年龄</label>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+            <th>Lorem ipsum dolor sit amet.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+            <td>Lorem ipsum dolor sit amet.</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
