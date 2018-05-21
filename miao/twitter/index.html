@@ -7,21 +7,25 @@
         body {
             margin: 0;
         }
-
-        div {
+		input {
+			display:none;
+		}
+        label {
+			display: block;
             width: 100px;
             height: 100px;
             background-image: url(web_heart_animation_edge.png);
-            background-position: 0 12px;
+            background-position: 0 0;
         }
 
-        div:focus {
+        input:checked + label {
             transition: background-position 1s steps(28);
-            background-position: 2800px 12px;
+            background-position: -2800px 0;
         }
     </style>
 </head>
 <body>
-<div tabindex="1"></div>
+<input type="checkbox" id="star">
+<label for="star"></label>
 </body>
 </html>
