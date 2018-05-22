@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            font-size: 0;
+            list-style: none;
+        }
+
+        ul.menu > li {
+            display: inline-block;
+        }
+
+        li {
+            position: relative;
+            padding: 10px;
+            min-width: 200px;
+            box-sizing: border-box;
+            font-size: 20px;
+            text-align: center;
+            white-space: nowrap;
+            background-color: lightblue;
+        }
+
+        li:hover {
+            background-color: lightcoral;
+        }
+
+        ul ul li {
+            display: none;
+        }
+
+        ul ul {
+            /* 相对于祖先元素中最近的 relative 元素 */
+            position: absolute;
+            top: 100%;
+            left: 0;
+        }
+
+        ul ul ul {
+            position: absolute;
+            top: 0;
+            left: 100%;
+        }
+
+        ul ul ul::before {
+            position: absolute;
+            top: 9px;
+            left: -24px;
+            content: '>';
+            font-size: 20px;
+        }
+
+        li:hover > ul > li { /* 神了 */
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<ul class="menu">
+    <li><a href="#Lorem1.">Lorem1.</a>
+        <ul>
+            <li><a href="#Lorem1.1">Lorem1.1</a></li>
+            <li><a href="#Lorem1.2">Lorem1.2</a></li>
+            <li><a href="#Lorem1.3">Lorem1.3</a>
+                <ul>
+                    <li><a href="#Lorem1.3.1">Lorem1.3.1</a></li>
+                    <li><a href="#Lorem1.3.2">Lorem1.3.2</a></li>
+                    <li><a href="#Lorem1.3.3">Lorem1.3.3</a></li>
+                    <li><a href="#Lorem1.3.4">Lorem1.3.4</a>
+                        <ul>
+                            <li><a href="#Lorem1.3.4.1">Lorem1.3.4.1</a></li>
+                            <li><a href="#Lorem1.3.4.2">Lorem1.3.4.2</a></li>
+                            <li><a href="#Lorem1.3.4.3">Lorem1.3.4.3</a></li>
+                            <li><a href="#Lorem1.3.4.4">Lorem1.3.4.4</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><a href="#Lorem2.">Lorem2.</a></li>
+    <li><a href="#Lorem3.">Lorem3.</a></li>
+    <li><a href="#Lorem4.">Lorem4.</a></li>
+    <li><a href="#Lorem5.">Lorem5.</a></li>
+</ul>
+</body>
+</html>

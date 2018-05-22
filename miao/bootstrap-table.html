@@ -10,20 +10,64 @@
         }
 
         .box {
-            display: flex;
-            margin: 10px;
-            width: 500px;
-            background-color: lightblue;
-            border: 1px solid lightblue;
+            display: table;
+            width: 700px;
+            margin: 50px;
+            border: 2px solid lightblue;
+            border-collapse: collapse;
+            border-spacing: 0;
         }
 
-        .input {
-            flex: 1;
+        span, input {
+            display: table-cell;
+            box-sizing: border-box;
+            font: inherit;
+            border: none;
         }
 
-        .input-info {
-            padding: 20px;
+        span {
+            width: 1%;
+            height: 28px;
+            line-height: 28px;
+            white-space: nowrap;
         }
+
+        input {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            outline: none;
+        }
+
+        input + span {
+            border-left: 2px solid lightblue;
+        }
+
+        span + input {
+            border-left: 2px solid lightblue;
+        }
+
+
+        /*input {*/
+            /*padding: 0;*/
+            /*border: none;*/
+        /*}*/
+
+        /*.box {*/
+            /*display: flex;*/
+            /*margin: 10px;*/
+            /*width: 500px;*/
+            /*background-color: lightblue;*/
+            /*border: 1px solid lightblue;*/
+        /*}*/
+
+        /*.input {*/
+            /*flex: 1;*/
+        /*}*/
+
+        /*.input-info {*/
+            /*padding: 20px;*/
+        /*}*/
 
         .table {
             display: table;
@@ -56,14 +100,16 @@
 </head>
 <body>
 <div class="box">
-    <label class="input-info" for="name">请输入你的姓名</label>
-    <input class="input" id="name">
+    <span class="input-info">请输入你的姓名</span>
+    <input class="input">
 </div>
 
 <div class="box">
-    <input class="input" id="age">
-    <label class="input-info" for="age">年龄</label>
+    <input class="input">
+    <span class="input-info">年龄</span>
 </div>
+
+
 <div class="table-responsive">
     <table class="table table-hover table-bordered table-striped">
         <thead>

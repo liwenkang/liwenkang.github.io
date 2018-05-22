@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;/* 黑魔法：至少撑开一个页面高度 */
+        }
+
+        body {
+            margin: 0 0 60px 0;
+        }
+
+        main {
+            width: auto;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            display: block;
+            width: 100vw;
+            height: 60px;
+            line-height: 60px;
+            background-color: #DDDDDD;
+        }
+
+        footer p {
+            margin: 0 auto;
+            max-width: 680px;
+            height: 60px;
+            line-height: 60px;
+            padding: 0 15px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Sticky footer</h1>
+    <p class="info">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML
+        and CSS.</p>
+    <p class="tip">Use <a href="">the sticky footer with a fixed navbar</a> if need be, too.</p>
+</main>
+<footer>
+    <p>Place sticky footer content here.</p>
+</footer>
+</body>
+</html>
