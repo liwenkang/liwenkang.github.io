@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <!--<meta http-equiv="refresh" content="5">-->
+    <title>纯 CSS 实现手动轮播图</title>
+    <style>
+        /* 接下来实现的是带有过渡动画的点击切换轮播图 */
+        body {
+            margin: 0;
+        }
+
+        div {
+            width: 600px;
+            height: 401px;
+            background-image: url(1.jpg), url(2.jpg), url(3.jpg), url(4.jpg);
+            background-position: 0 0, 600px 0, 1200px 0, 1800px 0;
+            background-repeat: no-repeat;
+            transition: background-position 1s linear;
+        }
+
+        input.selectPic1:checked ~ div {
+            background-position: 0 0, 600px 0, 1200px 0, 1800px 0;
+        }
+
+        input.selectPic2:checked ~ div {
+            background-position: -600px 0, 0 0, 600px 0, 1200px 0;
+        }
+
+        input.selectPic3:checked ~ div {
+            background-position: -1200px 0, -600px 0, 0 0, 600px 0;
+        }
+
+        input.selectPic4:checked ~ div {
+            background-position: -1800px 0, -1200px 0, -600px 0, 0 0;
+        }
+    </style>
+</head>
+<body>
+<input type="radio" name="num" class="selectPic1" checked>1
+<input type="radio" name="num" class="selectPic2">2
+<input type="radio" name="num" class="selectPic3">3
+<input type="radio" name="num" class="selectPic4">4
+<div></div>
+</body>
+</html>

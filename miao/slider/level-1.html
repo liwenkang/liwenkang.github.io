@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <!--<meta http-equiv="refresh" content="5">-->
+    <title>纯 CSS 实现手动轮播图</title>
+    <style>
+        /* 首先实现的是最简单的点击切换轮播图,注意, display 和 visibility 都不是做动画的好选择  */
+        body {
+            margin: 0;
+        }
+        img {
+            width: 600px;
+            height: 401px;
+            display: none;
+        }
+
+        input:checked + * + * + * + img {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+<input type="radio" name="num" checked>1
+<input type="radio" name="num">2
+<input type="radio" name="num">3
+<input type="radio" name="num">4
+
+<img src="1.jpg" alt="">
+<img src="2.jpg" alt="">
+<img src="3.jpg" alt="">
+<img src="4.jpg" alt="">
+</body>
+</html>

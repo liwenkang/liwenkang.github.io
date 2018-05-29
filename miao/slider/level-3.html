@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <!--<meta http-equiv="refresh" content="5">-->
+    <title>纯 CSS 实现手动轮播图</title>
+    <style>
+        /* 接下来实现的是带有过渡动画的点击切换轮播图, */
+        body {
+            margin: 0;
+        }
+
+        div {
+            display: inline-block;
+            float: left;
+            width: 150px;
+            height: 401px;
+            overflow: hidden;
+            border: 1px solid red;
+        }
+
+        .bg-part-one,
+        .bg-part-two,
+        .bg-part-three,
+        .bg-part-four {
+            transition: background-position 1s linear;
+        }
+
+        /* 初始化位置  */
+        .bg-part-one {
+            background-position: -150px 0;
+        }
+
+        .bg-part-two {
+            background-position: -300px 0;
+        }
+
+        .bg-part-three {
+            background-position: -450px 0;
+        }
+
+        .bg-part-four {
+            background-position: -600px 0;
+        }
+
+        /* 初始化位置结束  */
+
+        .selectPic1:checked ~ .bg-part {
+            background-image: url(1.jpg);
+            background-repeat: no-repeat;
+        }
+
+        .selectPic2:checked ~ .bg-part {
+            background-image: url(2.jpg);
+            background-repeat: no-repeat;
+        }
+
+        /* 当选中 1 的时候,图片整体右移进入 */
+        .selectPic1:checked ~ .bg-part-one,
+        .selectPic2:checked ~ .bg-part-one {
+            background-position: 0 0;
+        }
+
+        .selectPic1:checked ~ .bg-part-two,
+        .selectPic2:checked ~ .bg-part-two {
+            background-position: -150px 0;
+        }
+
+        .selectPic1:checked ~ .bg-part-three,
+        .selectPic2:checked ~ .bg-part-three {
+            background-position: -300px 0;
+        }
+
+        .selectPic1:checked ~ .bg-part-four,
+        .selectPic2:checked ~ .bg-part-four {
+            background-position: -450px 0;
+        }
+    </style>
+</head>
+<body>
+<!--todo 没有思路啦!!! -->
+<input type="radio" name="num" class="selectPic1">1
+<input type="radio" name="num" class="selectPic2">2
+<!--<input type="radio" name="num" class="selectPic3">3-->
+<!--<input type="radio" name="num" class="selectPic4">4-->
+
+
+<div class="bg-part-one bg-part"></div>
+<div class="bg-part-two bg-part"></div>
+<div class="bg-part-three bg-part"></div>
+<div class="bg-part-four bg-part"></div>
+
+</body>
+</html>
