@@ -1,0 +1,23 @@
+.banner {
+  width: 100%; }
+  .banner .banner-content {
+    width: 1226px;
+    height: 460px;
+    margin: 0 auto;
+    background-image: url(picture/banner/banner-1.jpg); }
+    .banner .banner-content ul {
+      width: 234px;
+      height: 460px;
+      background-color: rgba(0, 0, 0, 0.6); }
+    .banner .banner-content li {
+      display: block;
+      width: 234px;
+      height: 42px;
+      line-height: 42px;
+      padding-left: 30px; }
+    .banner .banner-content li:first-child {
+      padding-top: 20px; }
+    .banner .banner-content li:hover {
+      background-color: red; }
+
+/*# sourceMappingURL=banner.css.map */

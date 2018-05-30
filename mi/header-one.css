@@ -3,37 +3,37 @@
   width: 100%;
   background-color: #000;
   height: 40px; }
-  .header-one .header-content {
+  .header-one .header-one-content {
     width: 1226px;
     height: 40px;
     margin: 0 auto; }
-    .header-one .header-content .header-ul-left {
+    .header-one .header-one-content .header-ul-left {
       float: left; }
-      .header-one .header-content .header-ul-left > li {
+      .header-one .header-one-content .header-ul-left > li {
         float: left;
         display: block;
         height: 40px;
         line-height: 40px;
         font-size: 12px; }
-        .header-one .header-content .header-ul-left > li a {
+        .header-one .header-one-content .header-ul-left > li a {
           color: #B0B0B0; }
-        .header-one .header-content .header-ul-left > li span {
+        .header-one .header-one-content .header-ul-left > li span {
           margin: 0 0.5em;
           color: #424242; }
-    .header-one .header-content .header-ul-right {
+    .header-one .header-one-content .header-ul-right {
       float: right; }
-      .header-one .header-content .header-ul-right > li {
+      .header-one .header-one-content .header-ul-right > li {
         float: left;
         display: block;
         height: 40px;
         line-height: 40px;
         font-size: 12px; }
-        .header-one .header-content .header-ul-right > li span {
+        .header-one .header-one-content .header-ul-right > li span {
           margin: 0 0.5em;
           color: #424242; }
-        .header-one .header-content .header-ul-right > li a {
+        .header-one .header-one-content .header-ul-right > li a {
           color: #B0B0B0; }
-      .header-one .header-content .header-ul-right .shopcart {
+      .header-one .header-one-content .header-ul-right .shopcart {
         position: relative;
         width: 120px;
         height: 40px;
@@ -42,30 +42,31 @@
         background-color: #424242;
         text-align: center;
         cursor: pointer;
-        background-image: url(picture/shopcart-gray.png);
+        background-image: url(picture/header-one/shopcart-gray.png);
         background-size: 20px 20px;
         background-repeat: no-repeat;
-        background-position: top 10px left 16px; }
-        .header-one .header-content .header-ul-right .shopcart:hover {
-          background-image: url(picture/shopcart-orange.png);
+        background-position: top 10px left 16px;
+        z-index: 9999; }
+        .header-one .header-one-content .header-ul-right .shopcart:hover {
+          background-image: url(picture/header-one/shopcart-orange.png);
           background-color: #ffffff; }
-          .header-one .header-content .header-ul-right .shopcart:hover a, .header-one .header-content .header-ul-right .shopcart:hover span {
+          .header-one .header-one-content .header-ul-right .shopcart:hover a, .header-one .header-one-content .header-ul-right .shopcart:hover span {
             color: #FF8837; }
-          .header-one .header-content .header-ul-right .shopcart:hover ul {
+          .header-one .header-one-content .header-ul-right .shopcart:hover ul {
             display: block;
             background-color: lightblue;
             position: relative;
             left: -80px;
             /* 向左偏 */
             width: 200px; }
-        .header-one .header-content .header-ul-right .shopcart span {
+        .header-one .header-one-content .header-ul-right .shopcart span {
           position: absolute;
           top: 0;
           left: 74px;
           width: 20px;
           height: 20px;
           color: #B0B0B0; }
-        .header-one .header-content .header-ul-right .shopcart ul {
+        .header-one .header-one-content .header-ul-right .shopcart ul {
           display: none; }
 
 /*# sourceMappingURL=header-one.css.map */
