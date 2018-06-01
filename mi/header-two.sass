@@ -1,4 +1,6 @@
 .header-two
+  position: relative
+  z-index: 999
   width: 100%
   height: 100px
   .header-two-content
@@ -91,6 +93,7 @@
             line-height: 100px
             font-size: 16px
     .right
+      z-index: 999
       margin-top: 25px
       float: right
       position: relative
@@ -146,15 +149,17 @@
               color: #B0B0B0
         .search-bgi
           display: block
-          width: 18px
+          width: 19px
           height: 18px
+          padding: 16px
           position: absolute
-          right: 17px
-          top: 17px
+          right: 1px
+          top: 0
           color: black
           z-index: 1
-          &:hover ~ input.search-bg
+          &:hover
             background-color: #FF8837
+            color: white
         .search-bg
           float: left
           position: relative
@@ -163,10 +168,8 @@
           box-sizing: border-box
           border: 1px solid #e0e0e0
           border-left: none
-          background-color: #fff
           padding: 0
           outline: none
-          &:hover
-            background-color: #FF8837
+          background-color: #fff
         ul
           display: none

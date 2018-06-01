@@ -1,23 +1,118 @@
 .banner {
   width: 100%; }
   .banner .banner-content {
+    position: relative;
     width: 1226px;
     height: 460px;
-    margin: 0 auto;
-    background-image: url(picture/banner/banner-1.jpg); }
-    .banner .banner-content ul {
+    margin: 0 auto 14px;
+    background-image: url(picture/banner/banner-1.jpg);
+    background-repeat: no-repeat; }
+    .banner .banner-content > ul {
       width: 234px;
       height: 460px;
       background-color: rgba(0, 0, 0, 0.6); }
-    .banner .banner-content li {
+      .banner .banner-content > ul::before {
+        display: block;
+        content: "";
+        width: 234px;
+        height: 20px; }
+      .banner .banner-content > ul > li {
+        display: block;
+        width: 204px;
+        height: 42px;
+        line-height: 42px;
+        padding-left: 30px;
+        font-size: 14px;
+        color: #ffffff; }
+        .banner .banner-content > ul > li:hover {
+          background-color: #FF8837; }
+        .banner .banner-content > ul > li svg {
+          display: block;
+          float: right;
+          margin-right: 16px;
+          width: 22px;
+          height: 42px;
+          line-height: 42px;
+          font-size: 22px; }
+        .banner .banner-content > ul > li ul {
+          display: none; }
+        .banner .banner-content > ul > li:hover ul {
+          z-index: 999;
+          display: block;
+          height: 460px;
+          position: absolute;
+          top: 0;
+          left: 234px;
+          background-color: #ffffff; }
+          .banner .banner-content > ul > li:hover ul li:nth-of-type(n+7) {
+            margin-left: 265px; }
+          .banner .banner-content > ul > li:hover ul li:nth-of-type(n+13) {
+            margin-left: 530px; }
+          .banner .banner-content > ul > li:hover ul li:nth-of-type(6n+7) {
+            margin-top: -460px; }
+          .banner .banner-content > ul > li:hover ul li {
+            display: block;
+            position: relative;
+            width: 265px;
+            height: 77px;
+            line-height: 77px;
+            box-sizing: border-box;
+            padding: 18px 20px;
+            vertical-align: top; }
+            .banner .banner-content > ul > li:hover ul li a img {
+              display: inline-block;
+              width: 40px;
+              height: 40px; }
+            .banner .banner-content > ul > li:hover ul li a span {
+              font-size: 14px;
+              position: absolute;
+              top: 0;
+              left: 72px; }
+              .banner .banner-content > ul > li:hover ul li a span:hover {
+                color: #FF8837; }
+    .banner .banner-content > .pager-button .last-pager {
       display: block;
-      width: 234px;
-      height: 42px;
-      line-height: 42px;
-      padding-left: 30px; }
-    .banner .banner-content li:first-child {
-      padding-top: 20px; }
-    .banner .banner-content li:hover {
-      background-color: red; }
+      width: 40px;
+      height: 70px;
+      position: absolute;
+      top: 195px;
+      left: 234px;
+      background-color: lightcoral; }
+      .banner .banner-content > .pager-button .last-pager svg {
+        width: 40px;
+        height: 70px;
+        color: rgba(255, 255, 255, 0.4);
+        transform: rotate(180deg); }
+    .banner .banner-content > .pager-button .next-pager {
+      display: block;
+      width: 40px;
+      height: 70px;
+      position: absolute;
+      top: 195px;
+      right: 0;
+      background-color: lightblue; }
+      .banner .banner-content > .pager-button .next-pager svg {
+        width: 40px;
+        height: 70px;
+        color: rgba(255, 255, 255, 0.4); }
+    .banner .banner-content > .pager-link {
+      position: absolute;
+      right: 32px;
+      bottom: 22px; }
+      .banner .banner-content > .pager-link span {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        text-align: center;
+        vertical-align: middle;
+        margin-right: 6px;
+        border-radius: 9999px;
+        background-color: rgba(255, 255, 255, 0.4);
+        border: 2px solid rgba(0, 0, 0, 0.4);
+        color: #757575;
+        box-sizing: border-box; }
+        .banner .banner-content > .pager-link span:hover {
+          background-color: rgba(0, 0, 0, 0.4);
+          border-color: rgba(255, 255, 255, 0.4); }
 
 /*# sourceMappingURL=banner.css.map */

@@ -1,21 +1,117 @@
 .banner
   width: 100%
   .banner-content
+    position: relative
     width: 1226px
     height: 460px
-    margin: 0 auto
+    margin: 0 auto 14px
     background-image: url(picture/banner/banner-1.jpg)
-    ul
+    background-repeat: no-repeat
+    & > ul
       width: 234px
       height: 460px
       background-color: rgba(0, 0, 0, 0.6)
-    li
-      display: block
-      width: 234px
-      height: 42px
-      line-height: 42px
-      padding-left: 30px
-    li:first-child
-      padding-top: 20px
-    li:hover
-      background-color: red
+      &::before
+        display: block
+        content: ""
+        width: 234px
+        height: 20px
+      & > li
+        display: block
+        width: 204px
+        height: 42px
+        line-height: 42px
+        padding-left: 30px
+        font-size: 14px
+        color: #ffffff
+        &:hover
+          background-color: #FF8837
+        svg
+          display: block
+          float: right
+          margin-right: 16px
+          width: 22px
+          height: 42px
+          line-height: 42px
+          font-size: 22px
+        & ul
+          display: none
+        &:hover ul
+          z-index: 999
+          display: block
+          height: 460px
+          position: absolute
+          top: 0
+          left: 234px
+          background-color: #ffffff
+          li:nth-of-type(n+7)
+            margin-left: 265px
+          li:nth-of-type(n+13)
+            margin-left: 530px
+          li:nth-of-type(6n+7)
+            margin-top: -460px
+          li
+            display: block
+            position: relative
+            width: 265px
+            height: 77px
+            line-height: 77px
+            box-sizing: border-box
+            padding: 18px 20px
+            vertical-align: top
+            a img
+              display: inline-block
+              width: 40px
+              height: 40px
+            a span
+              font-size: 14px
+              position: absolute
+              top: 0
+              left: 72px
+              &:hover
+                color: #FF8837
+    & > .pager-button
+      .last-pager
+        display: block
+        width: 40px
+        height: 70px
+        position: absolute
+        top: 195px
+        left: 234px
+        background-color: lightcoral
+        svg
+          width: 40px
+          height: 70px
+          color: rgba(255, 255, 255, 0.4)
+          transform: rotate(180deg)
+      .next-pager
+        display: block
+        width: 40px
+        height: 70px
+        position: absolute
+        top: 195px
+        right: 0
+        background-color: lightblue
+        svg
+          width: 40px
+          height: 70px
+          color: rgba(255, 255, 255, 0.4)
+    & > .pager-link
+      position: absolute
+      right: 32px
+      bottom: 22px
+      span
+        display: inline-block
+        width: 10px
+        height: 10px
+        text-align: center
+        vertical-align: middle
+        margin-right: 6px
+        border-radius: 9999px
+        background-color: rgba(255, 255, 255, 0.4)
+        border: 2px solid rgba(0, 0, 0, 0.4)
+        color: #757575
+        box-sizing: border-box
+        &:hover
+          background-color: rgba(0, 0, 0, 0.4)
+          border-color: rgba(255, 255, 255, 0.4)
