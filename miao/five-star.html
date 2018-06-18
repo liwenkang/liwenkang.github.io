@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+          integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <style>
+        html, body {
+            width: 100%;
+            margin: 0;
+        }
+
+        /*.rating {*/
+        /*!**/
+        /** 由于 CSS 选择器的限制,你只能选择某个元素后面的兄弟元素,而不能选择之前的*/
+        /** 所以,为了选择到某元素其那面的兄弟元素,可以直接把所有的元素反向排序*/
+        /***!*/
+        /*unicode-bidi: bidi-override;*/
+        /*!**/
+        /** bidi-override:*/
+        /** For inline elements this creates an override. For block container elements this creates an override for*/
+        /** inline-level descendants not within another block container element. This means that inside the element,*/
+        /** reordering is strictly in sequence according to the direction property; the implicit part of the bidirectional*/
+        /** algorithm is ignored.*/
+        /** https://css-tricks.com/almanac/properties/u/unicode-bidi/*/
+        /***!*/
+        /*direction: rtl;*/
+        /*width: 500px;*/
+        /*padding-left: 10px;*/
+        /*font-size: 0;*/
+        /*margin: 0 auto;*/
+        /*}*/
+
+        /*.rating span {*/
+        /*display: inline-block;*/
+        /*width: 100px;*/
+        /*height: 100px;*/
+        /*font-size: 100px;*/
+        /*}*/
+
+        /*.rating span:hover::before,*/
+        /*.rating span:hover ~ span::before {*/
+        /*!*.rating > span:hover ~ span:before {*!*/
+        /*content: "\2605";*/
+        /*position: absolute;*/
+        /*color: #D5A120;*/
+        /*}*/
+
+        .icon-rating {
+            margin: auto;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: 550px;
+            height: 100px;
+            font-size: 0;
+            unicode-bidi: bidi-override;
+            direction: rtl;
+        }
+
+        .icon-rating i {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            padding-left: 10px;
+            font-size: 100px;
+        }
+
+        .icon-rating i:last-of-type(1) {
+            padding-right: 0;
+        }
+
+        .icon-rating i:hover::before,
+        .icon-rating i:hover ~ i::before {
+            content: '\f005';
+            color: #e3cf7a;
+        }
+    </style>
+</head>
+<body>
+
+<!--<div class="rating">-->
+<!--<span>☆</span>-->
+<!--<span>☆</span>-->
+<!--<span>☆</span>-->
+<!--<span>☆</span>-->
+<!--<span>☆</span>-->
+<!--</div>-->
+
+<div class="icon-rating">
+    <i class="far fa-star"></i>
+    <i class="far fa-star"></i>
+    <i class="far fa-star"></i>
+    <i class="far fa-star"></i>
+    <i class="far fa-star"></i>
+</div>
+
+</body>
+</html>
