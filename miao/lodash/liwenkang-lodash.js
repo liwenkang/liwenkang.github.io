@@ -1259,5 +1259,3 @@ var liwenkang = {
         }
     }
 }
-
-module.exports = liwenkang;
