@@ -3,6 +3,45 @@ const log = console.log.bind(console)
 var liwenkang = {
     // Array
 
+    property: function (string) {
+        return obj => {
+            for (var props in obj) {
+                if (props === string) {
+                    // 匹配上了,不能删
+                    return false
+                }
+            }
+            return true
+        }
+    },
+
+    matchesProperty: function (array) {
+        return obj => {
+            for (var i = 0; i < array.length; i += 2) {
+                var prop = array[i]
+                var value = array[i + 1]
+                if (obj[prop] !== value) {
+                    // 有值不同, 不能删
+                    return false
+                }
+            }
+            return true
+        }
+    },
+
+    matches: function (object) {
+        return obj => {
+            for (var props in object) {
+                // 如果 object 的所有属性 都能在 obj
+                if (obj[props] !== object[props]) {
+                    // 有不同的地方, 不能删
+                    return false
+                }
+            }
+            return true
+        }
+    },
+
     chunk: function (array, size) {
         var result = []
         for (var i = 0; i < array.length; i += size) {
@@ -93,56 +132,6 @@ var liwenkang = {
         return array
     },
 
-    baseGet: function (object, path) {
-        path = castPath(path, object)
-
-        var index = 0,
-            length = path.length
-
-        while (object != null && index < length) {
-            object = object[toKey(path[index++])]
-        }
-        return (index && index == length) ? object : undefined
-    },
-
-    basePropertyDeep: function (path) {
-        return function (object) {
-            return baseGet(object, path)
-        }
-    },
-
-    toKey: function (value) {
-        if (typeof value == 'string' || isSymbol(value)) {
-            return value
-        }
-        var result = (value + '')
-        return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result
-    },
-
-    baseProperty: function (key) {
-        return function (object) {
-            return object == null ? undefined : object[key]
-        }
-    },
-
-    isKey: function (value, object) {
-        // Checks if `value` is a property name and not a property path.
-        if (isArray(value)) {
-            return false
-        }
-        var type = typeof value
-        if (type === 'number' || type === 'symbol' || type === 'boolean' ||
-            value === null || isSymbol(value)) {
-            return true
-        }
-        return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
-            (object != null && value in Object(object))
-    },
-
-    property: function (path) {
-        return _.isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path)
-    },
-
     differenceBy: function (array, values, iteratee) {
         // 非对象类型的比较时
         var allArray = []
@@ -208,12 +197,100 @@ var liwenkang = {
         return array.slice(0, array.length - n)
     },
 
-    dropRightWhile: function (array, predicate) {
-
+    dropWhile: function (array, predicate) {
+        // predicate 默认是一个函数
+        var newArray = array.slice(0)
+        if (typeof predicate === "function") {
+            for (var i = 0; i < newArray.length; i++) {
+                if (predicate(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (Array.isArray(predicate)) {
+            for (var i = 0; i < newArray.length; i++) {
+                if (_.matchesProperty(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (typeof predicate === "object") {
+            // 将 predicate 转换为一个函数
+            for (var i = 0; i < newArray.length; i++) {
+                if (_.matches(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (typeof predicate === "string") {
+            for (var i = 0; i < newArray.length; i++) {
+                if (_.property(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        }
+        return newArray
     },
 
-    dropWhile: function () {
-
+    dropRightWhile: function (array, predicate) {
+        // predicate 默认是一个函数
+        var newArray = array.slice(0)
+        if (typeof predicate === "function") {
+            for (var i = newArray.length - 1; i >= 0; i--) {
+                if (predicate(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (Array.isArray(predicate)) {
+            for (var i = newArray.length - 1; i >= 0; i--) {
+                if (_.matchesProperty(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (typeof predicate === "object") {
+            // 将 predicate 转换为一个函数
+            for (var i = newArray.length - 1; i >= 0; i--) {
+                if (_.matches(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        } else if (typeof predicate === "string") {
+            for (var i = newArray.length - 1; i >= 0; i--) {
+                if (_.property(predicate)(newArray[i])) {
+                    // 返回true
+                    newArray.splice(i, 1)
+                    i--
+                } else {
+                    break
+                }
+            }
+        }
+        return newArray
     },
 
     fill: function (array, value, start = 0, end = array.length) {
@@ -223,9 +300,7 @@ var liwenkang = {
         return array
     },
 
-    findIndex: function (array, predicate, fromIndex = 0) {
-
-    },
+    findIndex: function (array, predicate, fromIndex = 0) {},
 
     findLastIndex: function () {
 
@@ -636,16 +711,6 @@ var liwenkang = {
     },
 
 // Collection
-
-    property: function (property, item) {
-        // property 可能是一个属性, 或者一个函数
-        if (typeof property === "string") {
-            return item[property]
-        } else {
-            return property(item)
-        }
-    },
-
     countBy: function (collection, iteratee) {
         // 数组,对象应该都可以
         // 数组
