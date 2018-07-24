@@ -246,51 +246,8 @@ var liwenkang = {
     },
 
     dropRightWhile: function (array, predicate) {
-        // predicate 默认是一个函数
-        var newArray = array.slice(0)
-        if (typeof predicate === "function") {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (predicate(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (Array.isArray(predicate)) {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.matchesProperty(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "object") {
-            // 将 predicate 转换为一个函数
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.matches(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "string") {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.property(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        }
-        return newArray
+        var newArray = array.slice(0).reverse()
+        return _.dropWhile(newArray, predicate).reverse()
     },
 
     fill: function (array, value, start = 0, end = array.length) {

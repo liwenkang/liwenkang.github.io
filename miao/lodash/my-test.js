@@ -89,74 +89,37 @@ var _ = {
     },
 
     dropRightWhile: function (array, predicate) {
-        // predicate 默认是一个函数
-        var newArray = array.slice(0)
-        if (typeof predicate === "function") {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (predicate(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (Array.isArray(predicate)) {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.matchesProperty(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "object") {
-            // 将 predicate 转换为一个函数
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.matches(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "string") {
-            for (var i = newArray.length - 1; i >= 0; i--) {
-                if (_.property(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        }
-        return newArray
+        var newArray = array.slice(0).reverse()
+        return _.dropWhile(newArray, predicate).reverse()
     },
 }
 
-var users = [
-    {'user': 'a', 'active': false},
-    {'user': 'b', 'active': false},
-    {'user': 'c', 'active': true},
-    {'user': 'd', 'active': false},
-    {'user': 'e', 'active': false}
-]
-log(_.dropWhile(users, function (o) {
+
+log(_.dropRightWhile([
+    {"user": "barney", "active": true},
+    {"user": "fred", "active": false},
+    {"user": "pebbles", "active": false}
+], function (o) {
     return !o.active
 }))
-// // => objects for ['pebbles']
+// 输出：[{"user":"barney","active":true},{"user":"fred","active":false}]
+// 期望：[{"user":"barney","active":true}]
 
-// The `_.matches` iteratee shorthand.
-log(_.dropWhile(users, {'user': 'barney', 'active': false}))
-// => objects for ['fred', 'pebbles']
-
-// // The `_.matchesProperty` iteratee shorthand.
-log(_.dropWhile(users, ['active', false]))
-// // => objects for ['pebbles']
+log(_.dropRightWhile([{"user": "barney", "active": true}, {
+    "user": "fred",
+    "active": false
+}, {"user": "pebbles", "active": false}], {"user": "pebbles", "active": false}))
+// // 输出/期望：[{"user":"barney","active":true},{"user":"fred","active":false}]
 //
-// // The `_.property` iteratee shorthand.
-log(_.dropWhile(users, 'active'))
-// // => objects for ['barney', 'fred', 'pebbles']
+log(_.dropRightWhile([{"user": "barney", "active": true}, {
+    "user": "fred",
+    "active": false
+}, {"user": "pebbles", "active": false}], ["active", false]))
+// // 输出：[{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}]
+// // 期望：[{"user":"barney","active":true}]
+//
+log(_.dropRightWhile([{"user": "barney", "active": true}, {
+    "user": "fred",
+    "active": false
+}, {"user": "pebbles", "active": false}], "active"))
+// // 输出/期望：[{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}]
