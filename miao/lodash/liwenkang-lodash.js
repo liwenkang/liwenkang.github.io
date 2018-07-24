@@ -1,6 +1,6 @@
 const log = console.log.bind(console)
 
-var _ = {
+var liwenkang = {
     // Array
 
     chunk: function (array, size) {
@@ -1364,7 +1364,7 @@ var _ = {
     cloneWith: function (value, customizer) {
 
     },
-    
+
     conformsTo: function (object, source) {
         for (var props in source) {
             return source[props](object[props])
