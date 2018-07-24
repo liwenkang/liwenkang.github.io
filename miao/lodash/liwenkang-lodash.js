@@ -1,6 +1,6 @@
 const log = console.log.bind(console)
 
-var liwenkang = {
+var _ = {
     // Array
 
     chunk: function (array, size) {
@@ -37,6 +37,110 @@ var liwenkang = {
             }
         }
         return result
+    },
+
+    differenceWith: function (array, values, comparator) {
+        // 非对象类型的比较时
+        var allArray = []
+        var funcFlag = false
+        var propFlag = false
+        if (typeof arguments[arguments.length - 1] === "string") {
+            propFlag = true
+            var property = arguments[arguments.length - 1]
+        } else if (typeof arguments[arguments.length - 1] === "function") {
+            funcFlag = true
+            var func = arguments[arguments.length - 1]
+        }
+
+        for (var i = 1; i < arguments.length; i++) {
+            if (typeof arguments[i] === "object") {
+                allArray = allArray.concat(arguments[i])
+            }
+        }
+
+        if (funcFlag) {
+            for (var i = 0; i < allArray.length; i++) {
+                allArray[i] = func(allArray[i])
+            }
+            // 需要进过处理后,如果有重复的,就删除
+            for (var i = 0; i < array.length; i++) {
+                if (allArray.includes(func(array[i]))) {
+                    array.splice(i, 1)
+                    i--
+                }
+            }
+        } else if (propFlag) {
+            // 需要进过处理后,如果有重复的,就删除
+            for (var i = 0; i < allArray.length; i++) {
+                allArray[i] = allArray[i][property]
+            }
+            // 需要进过处理后,如果有重复的,就删除
+            for (var i = 0; i < array.length; i++) {
+                if (allArray.includes(array[i][property])) {
+                    array.splice(i, 1)
+                    i--
+                }
+            }
+        } else {
+            // 需要进过处理后,如果有重复的,就删除
+            for (var i = 0; i < array.length; i++) {
+                if (allArray.includes(array[i])) {
+                    array.splice(i, 1)
+                    i--
+                }
+            }
+        }
+        return array
+    },
+
+    baseGet: function (object, path) {
+        path = castPath(path, object)
+
+        var index = 0,
+            length = path.length
+
+        while (object != null && index < length) {
+            object = object[toKey(path[index++])]
+        }
+        return (index && index == length) ? object : undefined
+    },
+
+    basePropertyDeep: function (path) {
+        return function (object) {
+            return baseGet(object, path)
+        }
+    },
+
+    toKey: function (value) {
+        if (typeof value == 'string' || isSymbol(value)) {
+            return value
+        }
+        var result = (value + '')
+        return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result
+    },
+
+    baseProperty: function (key) {
+        return function (object) {
+            return object == null ? undefined : object[key]
+        }
+    },
+
+    isKey: function (value, object) {
+        // Checks if `value` is a property name and not a property path.
+        if (isArray(value)) {
+            return false
+        }
+        var type = typeof value
+        if (type === 'number' || type === 'symbol' || type === 'boolean' ||
+            value === null || isSymbol(value)) {
+            return true
+        }
+        return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+            (object != null && value in Object(object))
+    },
+
+    property: function (path) {
+        return _.isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path)
     },
 
     differenceBy: function (array, values, iteratee) {
@@ -91,10 +195,6 @@ var liwenkang = {
             }
         }
         return array
-    },
-
-    differenceWith: function (array, [values], [comparator]) {
-        
     },
 
     drop: function (array, n = 1) {
@@ -221,7 +321,7 @@ var liwenkang = {
         if (array.length >= 1) {
             var str = "" + array[0]
             for (var i = 1; i < array.length; i++) {
-                str += (separator + array[i])
+                str += (separator + "" + array[i])
             }
             return str
         } else {
@@ -1264,8 +1364,7 @@ var liwenkang = {
     cloneWith: function (value, customizer) {
 
     },
-
-
+    
     conformsTo: function (object, source) {
         for (var props in source) {
             return source[props](object[props])
