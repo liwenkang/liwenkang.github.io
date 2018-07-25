@@ -2,17 +2,8 @@ const log = console.log.bind(console)
 
 var liwenkang = {
     // Array
-
     property: function (string) {
-        return obj => {
-            for (var props in obj) {
-                if (props === string) {
-                    // 匹配上了,不能删
-                    return false
-                }
-            }
-            return true
-        }
+        return obj => obj[string]
     },
 
     matchesProperty: function (array) {
@@ -212,7 +203,7 @@ var liwenkang = {
             }
         } else if (Array.isArray(predicate)) {
             for (var i = 0; i < newArray.length; i++) {
-                if (_.matchesProperty(predicate)(newArray[i])) {
+                if (liwenkang.matchesProperty(predicate)(newArray[i])) {
                     // 返回true
                     newArray.splice(i, 1)
                     i--
@@ -223,7 +214,7 @@ var liwenkang = {
         } else if (typeof predicate === "object") {
             // 将 predicate 转换为一个函数
             for (var i = 0; i < newArray.length; i++) {
-                if (_.matches(predicate)(newArray[i])) {
+                if (liwenkang.matches(predicate)(newArray[i])) {
                     // 返回true
                     newArray.splice(i, 1)
                     i--
@@ -233,8 +224,16 @@ var liwenkang = {
             }
         } else if (typeof predicate === "string") {
             for (var i = 0; i < newArray.length; i++) {
-                if (_.property(predicate)(newArray[i])) {
-                    // 返回true
+                var flag = false
+                var obj = newArray[i]
+                for (var props in obj) {
+                    if (props === liwenkang.property(predicate)(obj)) {
+                        // 不用删
+                        flag = false
+                    }
+                }
+                if (flag) {
+                    // 没找到合适的属性, 需要删除
                     newArray.splice(i, 1)
                     i--
                 } else {
@@ -247,7 +246,7 @@ var liwenkang = {
 
     dropRightWhile: function (array, predicate) {
         var newArray = array.slice(0).reverse()
-        return _.dropWhile(newArray, predicate).reverse()
+        return liwenkang.dropWhile(newArray, predicate).reverse()
     },
 
     fill: function (array, value, start = 0, end = array.length) {
@@ -257,7 +256,9 @@ var liwenkang = {
         return array
     },
 
-    findIndex: function (array, predicate, fromIndex = 0) {},
+    findIndex: function (array, predicate, fromIndex = 0) {
+
+    },
 
     findLastIndex: function () {
 

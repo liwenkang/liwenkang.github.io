@@ -1,16 +1,8 @@
 const log = console.log.bind(console)
 
-var _ = {
+var liwenkang = {
     property: function (string) {
-        return obj => {
-            for (var props in obj) {
-                if (props === string) {
-                    // 匹配上了,不能删
-                    return false
-                }
-            }
-            return true
-        }
+        return obj => obj[string]
     },
 
     matchesProperty: function (array) {
@@ -40,86 +32,64 @@ var _ = {
         }
     },
 
-    dropWhile: function (array, predicate) {
-        // predicate 默认是一个函数
-        var newArray = array.slice(0)
-        if (typeof predicate === "function") {
-            for (var i = 0; i < newArray.length; i++) {
-                if (predicate(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (Array.isArray(predicate)) {
-            for (var i = 0; i < newArray.length; i++) {
-                if (_.matchesProperty(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "object") {
-            // 将 predicate 转换为一个函数
-            for (var i = 0; i < newArray.length; i++) {
-                if (_.matches(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "string") {
-            for (var i = 0; i < newArray.length; i++) {
-                if (_.property(predicate)(newArray[i])) {
-                    // 返回true
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        }
-        return newArray
+    identity: function (value) {
+        // 返回获得的第一个值
+        return value
     },
 
-    dropRightWhile: function (array, predicate) {
-        var newArray = array.slice(0).reverse()
-        return _.dropWhile(newArray, predicate).reverse()
-    },
+    findIndex(array, predicate, fromIndex = 0) {
+        // 默认是个函数
+        if (typeof predicate === "function") {
+            for (var i = fromIndex; i < array.length; i++) {
+                if (predicate(array[i])) {
+                    return i
+                }
+            }
+            return -1
+        } else if (Array.isArray(predicate)) {
+            for (var i = 0; i < array.length; i++) {
+                if (liwenkang.matchesProperty(predicate)(array[i])) {
+                    return i
+                }
+            }
+            return -1
+        } else if (typeof predicate === "object") {
+            for (var i = 0; i < array.length; i++) {
+                if (liwenkang.matches(predicate)(array[i])) {
+                    return i
+                }
+            }
+            return -1
+        } else if (typeof predicate === "string") {
+            for (var i = 0; i < array.length; i++) {
+                if (liwenkang.property(predicate)(array[i])) {
+                    return i
+                }
+            }
+            return -1
+        }
+    }
 }
 
+var users = [
+    {'user': 'barney', 'active': false},
+    {'user': 'fred', 'active': false},
+    {'user': 'pebbles', 'active': true}
+]
 
-log(_.dropRightWhile([
-    {"user": "barney", "active": true},
-    {"user": "fred", "active": false},
-    {"user": "pebbles", "active": false}
-], function (o) {
-    return !o.active
+log(liwenkang.findIndex(users, function (o) {
+    return o.user == 'barney'
 }))
-// 输出：[{"user":"barney","active":true},{"user":"fred","active":false}]
-// 期望：[{"user":"barney","active":true}]
+// => 0
 
-log(_.dropRightWhile([{"user": "barney", "active": true}, {
-    "user": "fred",
-    "active": false
-}, {"user": "pebbles", "active": false}], {"user": "pebbles", "active": false}))
-// // 输出/期望：[{"user":"barney","active":true},{"user":"fred","active":false}]
-//
-log(_.dropRightWhile([{"user": "barney", "active": true}, {
-    "user": "fred",
-    "active": false
-}, {"user": "pebbles", "active": false}], ["active", false]))
-// // 输出：[{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}]
-// // 期望：[{"user":"barney","active":true}]
-//
-log(_.dropRightWhile([{"user": "barney", "active": true}, {
-    "user": "fred",
-    "active": false
-}, {"user": "pebbles", "active": false}], "active"))
-// // 输出/期望：[{"user":"barney","active":true},{"user":"fred","active":false},{"user":"pebbles","active":false}]
+// The `_.matches` iteratee shorthand.
+log(liwenkang.findIndex(users, {'user': 'fred', 'active': false}))
+// => 1
+
+// The `_.matchesProperty` iteratee shorthand.
+log(liwenkang.findIndex(users, ['active', false]))
+// => 0
+
+// The `_.property` iteratee shorthand.
+log(liwenkang.findIndex(users, 'active'))
+// => 2
