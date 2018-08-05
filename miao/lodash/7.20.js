@@ -109,7 +109,7 @@ function preOrderTraverse(root) {
 
 
 function preOrderTraverse(root) {
-    // inorder
+    // in order
     if (root) {
         preOrderTraverse(root.left)
         log(root.val)
@@ -118,7 +118,7 @@ function preOrderTraverse(root) {
 }
 
 function preOrderTraverse(root) {
-    // postorder
+    // post order
     if (root) {
         preOrderTraverse(root.left)
         preOrderTraverse(root.right)

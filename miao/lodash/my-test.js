@@ -11,7 +11,7 @@ var liwenkang = {
                 var prop = array[i]
                 var value = array[i + 1]
                 if (obj[prop] !== value) {
-                    // 有值不同, 不能删
+                    // 有值不同, 匹配失败, 不能删
                     return false
                 }
             }
@@ -24,7 +24,7 @@ var liwenkang = {
             for (var props in object) {
                 // 如果 object 的所有属性 都能在 obj
                 if (obj[props] !== object[props]) {
-                    // 有不同的地方, 不能删
+                    // 有不同的地方, 匹配失败, 不能删
                     return false
                 }
             }

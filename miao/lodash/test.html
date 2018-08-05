@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        (function f() {
+            var count = 0
+            var describe = function (str, func) {
+                count++
+                console.log(" ".repeat(count * 2) + str)
+                func()
+                count--
+            }
+
+            describe('foo', function foo() {
+                describe('bar', function foo() {
+                    describe('a', function foo() {
+                        describe('a.a', function foo() {
+                        })
+                    })
+                    describe('b', function foo() {
+                    })
+                })
+                describe('baz', function foo() {
+                    describe('aa', function foo() {
+                    })
+                    describe('bb', function foo() {
+                    })
+                })
+            })
+        })()
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

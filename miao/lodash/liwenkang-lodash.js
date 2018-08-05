@@ -1,6 +1,16 @@
 const log = console.log.bind(console)
 
 var liwenkang = {
+
+    isEqual: function (value, other) {
+/*
+Performs a deep comparison between two values to determine if they are equivalent.
+
+Note: This method supports comparing arrays, array buffers, booleans, date objects, error objects, maps, numbers, Object objects, regexes, sets, strings, symbols, and typed arrays. Object objects are compared by their own, not inherited, enumerable properties. Functions and DOM nodes are compared by strict equality, i.e. ===.
+*/
+
+
+    },
     // Array
     property: function (string) {
         return obj => obj[string]
@@ -71,55 +81,7 @@ var liwenkang = {
 
     differenceWith: function (array, values, comparator) {
         // 非对象类型的比较时
-        var allArray = []
-        var funcFlag = false
-        var propFlag = false
-        if (typeof arguments[arguments.length - 1] === "string") {
-            propFlag = true
-            var property = arguments[arguments.length - 1]
-        } else if (typeof arguments[arguments.length - 1] === "function") {
-            funcFlag = true
-            var func = arguments[arguments.length - 1]
-        }
 
-        for (var i = 1; i < arguments.length; i++) {
-            if (typeof arguments[i] === "object") {
-                allArray = allArray.concat(arguments[i])
-            }
-        }
-
-        if (funcFlag) {
-            for (var i = 0; i < allArray.length; i++) {
-                allArray[i] = func(allArray[i])
-            }
-            // 需要进过处理后,如果有重复的,就删除
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(func(array[i]))) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-        } else if (propFlag) {
-            // 需要进过处理后,如果有重复的,就删除
-            for (var i = 0; i < allArray.length; i++) {
-                allArray[i] = allArray[i][property]
-            }
-            // 需要进过处理后,如果有重复的,就删除
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(array[i][property])) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-        } else {
-            // 需要进过处理后,如果有重复的,就删除
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(array[i])) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-        }
         return array
     },
 

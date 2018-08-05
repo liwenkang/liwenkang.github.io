@@ -1,6 +1,6 @@
 const log = console.log.bind(console)
 //
-// // 方法
+// // 1. 作为方法调用
 // // var rabbit = {}
 // //
 // // rabbit.speak = function (line) {
@@ -25,8 +25,11 @@ const log = console.log.bind(console)
 // //
 // // whiteRabbit.speak("Oh my ears and whiskers, " + "how late it's getting!")
 //
+
+// 2. call(传入的是写死的) apply(传入的是动态的) bind(绑定this,以及后面的参数)
+
 // function bind(f, thisArg, ...fixedArgs) {
-//     return function (...restArgs) {
+//     return function (...restArgs) {ll
 //         return f.apply(thisArg, [...fixedArgs, ...restArgs])
 //     }
 // }

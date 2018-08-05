@@ -26,6 +26,40 @@ function bind(f, ...fixedArgs) {
     }
 }
 
-var a = bind(Math.max, 2)
+var postOrder = function (root) {
+    if (root) {
+        postOrder(root.left)
+        console.log(root.val)
+        postOrder(root.right)
+    }
+}
 
-log(a(3))
+postOrder({
+    val: 4,
+    left: {
+        val: 2,
+        left: {
+            val: 1,
+            left: null,
+            right: null
+        },
+        right: {
+            val: 3,
+            left: null,
+            right: null
+        }
+    },
+    right: {
+        val: 6,
+        left: {
+            val: 5,
+            left: null,
+            right: null
+        },
+        right: {
+            val: 7,
+            left: null,
+            right: null
+        }
+    }
+})

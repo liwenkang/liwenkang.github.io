@@ -1,6 +1,6 @@
 const log = console.log.bind(console)
 
-// 冒泡排序
+// 冒泡排序 (Bubble Sort)
 // 主要就是相邻的元素交换,将最大值,或者最小值放到数组末尾
 function sortArray(ary) {
     var l = ary.length
@@ -23,7 +23,7 @@ function sortArray(ary) {
     return ary
 }
 
-// 选择排序
+// 选择排序 (Selection Sort)
 // 将数组的第一项和后面最小的值交换
 // 将数组的第二项和后面最小的值交换
 function selectSort(array) {
@@ -43,7 +43,7 @@ function selectSort(array) {
     return array
 }
 
-// 插入排序
+// 插入排序 (Insertion Sort)
 // 从第 2 个元素开始,保证前 2 个是有序的
 // 从第 3 个元素开始,保证前 3 个是有序的
 function insertSort(array) {
