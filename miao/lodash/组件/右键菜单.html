@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .menu {
+            position: fixed;
+            border: 1px solid black;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+<!--
+<script>
+    function t(parts) {
+        // 返回 node 节点
+        var node = document.createElement("div")
+        node.innerHTML = parts.join("")
+        return node.firstElementChild
+    }
+
+    window.addEventListener('click', function (e) {
+        if (e.target.matches(".menu, .menu *")) {
+            if (e.target.id === "save") {
+                console.log("匹配上了 save")
+            }
+            if (e.target.id === "save-as") {
+                console.log("匹配上了 save-as")
+            }
+            if (e.target.id === "send") {
+                console.log("匹配上了 send")
+            }
+            var menu = document.querySelector(".menu")
+            document.body.removeChild(menu)
+        } else {
+            // 点到菜单外面了
+            var menu = document.querySelector(".menu")
+            document.body.removeChild(menu)
+        }
+    })
+
+    window.addEventListener('contextmenu', function (e) {
+        // 阻止掉默认的鼠标右键菜单
+        e.preventDefault()
+        // 删除已有的 menu
+        var menus = document.querySelectorAll(".menu")
+        menus.forEach(menu => {
+            document.body.removeChild(menu)
+        })
+        // 如果鼠标右键点击在右键菜单内,啥也不做
+        if (e.target.matches(".menu, .menu *")) {
+            return
+        }
+        var menu = t`
+             <ul class="menu" tabindex="-1">
+                 <li id="save">保存</li>
+                 <li id="save-as">另存为</li>
+                 <li id="send">发送</li>
+             </ul>`
+        menu.style.top = e.clientY + "px"
+        menu.style.left = e.clientX + "px"
+        document.body.appendChild(menu)
+        menu.focus()
+    })
+</script>
+-->
+<script>
+    function t(parts, ...args) {
+        var node = document.createElement('div')
+        node.innerHTML = parts.reduce((result, part, index) => {
+            return result + args[index - 1] + part
+        })
+        return node.firstElementChild
+    }
+
+    window.addEventListener('contextmenu', function(e) {
+        e.preventDefault()
+        if (e.target.matches('.menu, .menu *')) {
+            return
+        }
+        showContextMenu(e, [{
+            text: "打开",
+            handler: function () {
+                console.log("open")
+            }
+        }, {
+            text: "保存",
+            handler: function () {
+                console.log("save")
+            }
+        }, {
+            text: "关闭",
+            handler: function () {
+                console.log("close")
+            }
+        }])
+    })
+
+    function showContextMenu(event, mentItems) {
+        event.preventDefault()
+        var menu = t`
+            <ul class="menu" tabindex="-1">${mentItems.map(it => `<li>${it.text}</li>`).join("")}</ul>
+        `
+
+        menu.addEventListener('click', function (e) {
+
+            // 找出第几个 li
+            var clickItemIndex = Array.from(menu.children).findIndex(it => it === e.target)
+            mentItems[clickItemIndex].handler()
+            menu.blur()
+        })
+
+        menu.addEventListener("blur", function () {
+            document.body.removeChild(menu)
+        })
+
+        menu.style.top = event.clientY + "px"
+        menu.style.left = event.clientX + "px"
+
+        document.body.appendChild(menu)
+        menu.focus()
+    }
+</script>
+</body>
+</html>

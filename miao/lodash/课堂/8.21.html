@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>点击可得</div>
+<section>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquam animi assumenda blanditiis cum dicta
+    dolor est facilis id illo mollitia nesciunt nulla obcaecati qui quisquam repudiandae ut vitae, voluptas!
+</section>
+<script>
+    // // 触发后 3s 后执行一次
+    // var div = document.querySelector("div")
+    // var section = document.querySelector("section")
+    //
+    // var action = function () {
+    //     console.log("move")
+    // }
+    // var id
+    // div.addEventListener('mousemove', function () {
+    //     // 先取消一次
+    //     clearTimeout(id)
+    //     id = setTimeout(action, 1000)
+    // })
+    //
+    // // mousemove 持续 3s 执行一次
+    // var action2 = function () {
+    //     console.log("out")
+    // }
+    // var lastRunTime = 0
+    // section.addEventListener('mousemove', function () {
+    //     var now = Date.now()
+    //     if (now - lastRunTime > 3000) {
+    //         action2()
+    //         lastRunTime = now
+    //     }
+    // })
+    //
+    // function debounce(f, duration) {
+    //     var id = null
+    //     return function (...args) {
+    //         clearTimeout(id)
+    //         id = setTimeout(() => {
+    //             // 箭头函数里的 this 向外找
+    //             f.apply(this, ...args)
+    //         }, duration)
+    //     }
+    // }
+    //
+    // function throttle(f, duration) {
+    //     var lastRunTime = 0
+    //     return function (...args) {
+    //         var now = Date.now()
+    //         if (now - lastRunTime > duration) {
+    //             f.apply(this, ...args)
+    //             lastRunTime = now
+    //         }
+    //     }
+    // }
+    //
+    // div.addEventListener('mousemove', debounce(function () {
+    //     console.log(1)
+    // }), 2000)
+
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOMContentLoaded")
+    })
+
+    document.onreadystatechange = function () {
+        // console.log(document.readyState)
+        if (document.readyState === "interactive") {
+            // DOM解析完成
+            console.log("document.readyState")
+        }
+    }
+
+    window.onload = function (f) {
+        console.log("onload")
+    }
+
+    var whenReady = function () {
+        var isReady = false
+        var readyCallBack = []
+
+        if ('onreadystatechange' in document) {
+            document.addEventListener('readystatechange', function () {
+                if (document.readyState === "interactive") {
+                    readyCallBack.forEach(it => it())
+                }
+            })
+        } else {
+            window.onload = function () {
+                readyCallBack.forEach(it => it())
+            }
+        }
+
+        return function (f) {
+            if (!isReady) {
+                readyCallBack.push(f)
+            } else {
+                f()
+            }
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    window.onstorage = function (e) {
+        if (e.unread === undefined) {
+            document.querySelector('title').textContent = `您有${e.unread}条消息未读`
+        }
+    }
+
+
+</script>
+</body>
+</html>

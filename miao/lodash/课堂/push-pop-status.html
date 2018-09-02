@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<a href="./home">home</a>
+<a href="./about">about</a>
+<a href="./list">list</a>
+
+<section id="container">
+
+</section>
+<script type="text/template" id="./home">
+    <h1>home</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi aspernatur error facere facilis id iste libero
+        maxime repellendus sequi tempore! Architecto asperiores atque dignissimos doloremque harum officia quae quas
+        vel.</p>
+</script>
+<script type="text/template" id="./about">
+    <h1>about</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi aspernatur error facere facilis id iste libero
+        maxime repellendus sequi tempore! Architecto asperiores atque dignissimos doloremque harum officia quae quas
+        vel.</p>
+</script>
+<script type="text/template" id="./list">
+    <h1>list</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi aspernatur error facere facilis id iste libero
+        maxime repellendus sequi tempore! Architecto asperiores atque dignissimos doloremque harum officia quae quas
+        vel.</p>
+</script>
+
+<script>
+    var container = document.querySelector('#container')
+    document.body.addEventListener('click', function (e) {
+        if (e.target.matches('a')) {
+            var pageUrl = e.target.getAttribute("href")
+            var pageHtml = document.querySelector(`script[id="${pageUrl}"]`).textContent
+            container.innerHTML = pageHtml
+            history.pushState(null, null, pageUrl)
+        }
+        e.preventDefault()
+    })
+
+    window.onpopstate = function (e) {
+        var href = location.href // https://192.168.31.124:8081/list
+        var pageUrl = href.substr(26)
+        var pageHtml =
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .progress-innerEl {
+            background-color: lightblue;
+            height: 10px;
+            width: 0;
+            transition: width 0.4s;
+        }
+
+        .progress-outerEl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    class Progress {
+        constructor() {
+            this.innerEl = document.createElement("div")
+            this.outerEl = document.createElement("div")
+
+            this.innerEl.className = "progress-innerEl"
+            this.outerEl.className = "progress-outerEl"
+
+            this.outerEl.append(this.innerEl)
+            document.body.appendChild(this.outerEl)
+            this.status = 0
+        }
+
+        start() {
+            this.set(2)
+        }
+
+        increase(value = 5) {
+            this.status += value
+            this.innerEl.style.width = this.status + "%"
+        }
+
+        set(value) {
+            this.status = value
+            this.innerEl.style.width = this.status + "%"
+        }
+
+        end() {
+            this.status = 100
+            this.innerEl.style.width = this.status + "%"
+            setTimeout(() => {
+                document.body.removeChild(this.outerEl)
+            }, 1000)
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul id="list">
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <li>001</li>
+    <p>loading text</p>
+</ul>
+
+<script>
+    var loading = false
+
+    var list = document.querySelector("#list")
+    document.addEventListener('scroll', function (e) {
+        // 视口上方位置 + 视口高度
+        if (pageYOffset + innerHeight > document.documentElement.offsetHeight - 100) {
+
+            console.log("到底")
+            var li = document.createElement("li")
+            li.innerHTML = "Foo"
+            list.appendChild(li)
+        }
+    })
+
+    document.addEventListener('scroll', function (e) {
+        var inViewport = Array.from(list.children).filter(it => {
+            var pos = it.getBoundingClientRect()
+            if (pos.bottom > 0 && pos.top < innerHeight) {
+                return true
+            }
+        })
+        var outViewport = Array.from(list.children).filter(it => {
+            var pos = it.getBoundingClientRect()
+            if (!(pos.bottom > 0 && pos.top < innerHeight)) {
+                return true
+            }
+        })
+
+        inViewport.forEach(it => {
+            it.innerHTML = "foo"
+        })
+        outViewport.forEach(it => {
+            it.innerHTML = "null"
+        })
+    })
+</script>
+</body>
+</html>

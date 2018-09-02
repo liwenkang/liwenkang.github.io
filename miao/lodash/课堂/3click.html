@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="btn">click</div>
+
+<!--<script>-->
+<!--var btn = document.querySelector("#btn")-->
+<!--var lastDoubleClick = 0-->
+<!--btn.addEventListener('dblclick ', function () {-->
+<!--console.log('dblclick')-->
+<!--lastDoubleClick = Date.now()-->
+<!--})-->
+
+<!--var lastClickTime-->
+<!--var lastLastClickTime-->
+
+<!--btn.addEventListener('click', function () {-->
+<!--var thisClickTime = Date.now()-->
+
+<!--if (thisClickTime - lastLastClickTime < 400) {-->
+<!--lastLastClickTime = lastClickTime = thisClickTime = 0-->
+<!--}-->
+
+<!--lastLastClickTime = lastClickTime-->
+<!--lastClickTime = thisClickTime-->
+
+<!--})-->
+<!--</script>-->
+
+<script>
+    var btn = document.querySelector("#btn")
+    btn.addEventListener('click  ', function () {
+        console.log("two click")
+        var dblHandler
+        btn.addEventListener('dblclick', dblHandler = function () {
+            console.log('three click')
+        })
+
+        setTimeout(function () {
+            btn.removeEventListener('dblclick', dblHandler)
+        }, 200)
+    })
+</script>
+</body>
+</html>

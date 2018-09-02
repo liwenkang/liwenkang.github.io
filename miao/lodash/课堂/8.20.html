@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <input type="text" data-help-text="00001">
+    <p id="help"></p>
+</div>
+<script>
+    EventTarget.prototype.on = function (eventName, selecotr, handler) {
+        this.addEventListener(eventName, function (e) {
+            if (e.target.matches(selecotr)) {
+                handler.call(e.target, e)
+            }
+        })
+    }
+
+    body.on("focus", "input", function () {
+        
+    })
+    
+    // 使用事件捕获, 不冒泡
+    document.body.addEventListener('focus', function (e) {
+        if (e.target.matches("input")) {
+            help.textContent = e.target.dataset.helpText
+        }
+    }, true)
+
+    document.body.addEventListener('blur', function (e) {
+        if (e.target.matches("input")) {
+            help.textContent = ""
+        }
+    }, true)
+
+</script>
+</body>
+</html>

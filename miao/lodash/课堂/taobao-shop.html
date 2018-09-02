@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .product {
+            padding: 200px;
+            margin-bottom: 2000px;
+            text-align: right;
+        }
+
+        .cart {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="cart"></div>
+<div class="product">
+    <button>加入购物车</button>
+</div>
+
+<script>
+    var addBtn = document.querySelector('button')
+
+    function f(x1, x2, x3, y1, y2, y3) {
+        var a =
+        var b =
+        var c =
+
+        return function (x) {
+            return a * x * x + b * x + c
+        }
+    }
+
+    addBtn.addEventListener('click', function (e) {
+        //拿到
+        var p1x = e.clientX
+        var p1y = e.clientY
+
+        var p3x = innerWidth - 25
+        var p3y = 120
+
+        var p2x = (p3x + p1x) / 2
+        var p2y = 25
+
+        var el = document.createElement("span")
+        el.classList.add("add-cart-animate")
+        document.body.appendChild(el)
+
+        var transitionFunction = f(p1x, p2x, p3x, p1y, p2y, p3y)
+
+        var x = x1
+        var lastTime = 0
+
+        requestAnimationFrame(function animate(time) {
+            // 经过三个像素
+            if (lastTime !== 0) {
+                x += (time - lastTime) * 3
+            }
+            lastTime = time
+            var y = transitionFunction(x)
+
+            el.style.top = y + "px"
+            el.style.left = x + "px"
+
+            if (x < p3x) {
+                requestAnimationFrame(animate)
+            } else {
+                document.body.removeChild(el)
+            }
+
+            requestAnimationFrame(animate)
+        })
+
+        requestAnimationFrame()
+    })
+
+</script>
+</body>
+</html>

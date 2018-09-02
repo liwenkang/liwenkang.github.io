@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section>
+    <div>
+        <p>
+            <button>hello</button>
+        </p>
+    </div>
+</section>
+
+<script>
+
+    /*
+    * e.stopPropagation()
+    * 事件不会传给下一个元素
+    * 当前元素如果还有其他事件,可以继续执行
+    * 下一个元素不会执行
+    *
+    * e.stopImmediatePropagation()
+    * 立即停止,当前元素的其他操作也不会之乡
+    * */
+    var btn = document.querySelector('button')
+    var p = document.querySelector('p')
+    var div = document.querySelector('div')
+
+    btn.addEventListener('click', function(){
+        console.log('btn, click')
+    })
+
+    p.addEventListener('click', function(){
+        console.log('p, click')
+    })
+
+    div.addEventListener('click', function(){
+        console.log('div, click')
+    })
+
+    btn.addEventListener('click', function(){
+        console.log('btn, click 捕获')
+    },true)
+
+    p.addEventListener('click', function(){
+        console.log('p, click 捕获')
+    },true)
+
+    div.addEventListener('click', function(){
+        console.log('div, click 捕获')
+    },true)
+</script>
+</body>
+</html>

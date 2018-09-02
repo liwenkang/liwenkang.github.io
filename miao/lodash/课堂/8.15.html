@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #foo {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+<span id="foo"></span>
+<script>
+    var element = document.querySelector("#foo")
+    var i = 0
+
+    function step(time) {
+        console.log(time)
+        element.style.left = (i++ % 200) + "px"
+        requestAnimationFrame(step)
+    }
+
+    requestAnimationFrame(step)
+</script>
+</body>
+</html>
