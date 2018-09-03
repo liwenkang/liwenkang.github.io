@@ -614,6 +614,7 @@ var liwenkang = {
         }
         return array.length
     },
+
     sortedLastIndexBy(array, value, iteratee) {
         if (typeof iteratee === "function") {
             for (var i = 0; i < array.length; i++) {
@@ -631,6 +632,7 @@ var liwenkang = {
             return array.length
         }
     },
+
     sortedLastIndexOf(array, value) {
         for (var i = array.length - 1; i >= 0; i--) {
             if (value < array[i + 1] && value >= array[i]) {
@@ -1150,6 +1152,7 @@ var liwenkang = {
                 }
             }
         }
+        return collection
     },
 
     forEachRight: function (collection, iteratee) {
@@ -1166,6 +1169,7 @@ var liwenkang = {
                 }
             }
         }
+        return collection
     },
 
     groupBy: function (collection, iteratee) {
@@ -1306,19 +1310,19 @@ var liwenkang = {
     map: function (collection, iteratee) {
         if (Array.isArray(collection)) {
             if (typeof iteratee === "function") {
-                return collection.map(value => iteratee(value))
+                return collection.map((value, key, collection) => iteratee(value, key, collection))
             } else if (typeof iteratee === "string") {
-                return collection.map(value => liwenkang.property(iteratee)(value))
+                return collection.map(value => liwenkang.get(value, iteratee))
             }
         } else if (typeof collection === "object") {
             var result = []
             if (typeof iteratee === "function") {
                 for (var key in collection) {
-                    result.push(iteratee(collection[key]))
+                    result.push(iteratee(collection[key], key, collection))
                 }
             } else if (typeof iteratee === "string") {
                 for (var key in collection) {
-                    result.push(liwenkang.property(iteratee)(collection[key]))
+                    result.push(liwenkang.get(collection[key], iteratee))
                 }
             }
             return result
@@ -1388,10 +1392,29 @@ var liwenkang = {
 
     reduce: function (collection, iteratee, accumulator) {
         if (Array.isArray(collection)) {
-            return collection.reduce(iteratee, accumulator)
+            if (accumulator) {
+                for (var i = 0; i < collection.length; i++) {
+                    accumulator = iteratee(accumulator, collection[i])
+                }
+                return accumulator
+            } else {
+                return collection.reduce(iteratee)
+            }
         } else if (typeof collection === "object") {
-            for (var key in collection) {
-                accumulator = iteratee(accumulator, collection[key], key)
+            var flag = true
+            if (accumulator === undefined) {
+                for (var key in collection) {
+                    if (flag) {
+                        accumulator = collection[key]
+                        flag = false
+                    } else {
+                        accumulator = iteratee(accumulator, collection[key], key)
+                    }
+                }
+            } else {
+                for (var key in collection) {
+                    accumulator = iteratee(accumulator, collection[key], key)
+                }
             }
             return accumulator
         }
@@ -1537,7 +1560,7 @@ var liwenkang = {
     },
 
     now: function () {
-        return new Date().getTime();
+        return new Date().getTime()
     },
 
     after: function (n, func) {
