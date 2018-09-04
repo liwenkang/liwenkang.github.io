@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    const log = console.log.bind(console)
+
+    var debounce = function (fn, delay) {
+        // 如果触发了多次相同的函数(fn),那么在某次触发后 delay 时间后,没有再次触发这个函数,那么这个函数才会真正执行一次
+        var timer
+        return function (...args) {
+            // 清空计时器
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                // 由于箭头函数没有 this ,所以 此处的 this 是 return function() {} 里面的 this
+
+                // 当返回的函数被最后一次调用后（也就是用户停止了某个连续的操作），
+                // 再过 delay 毫秒就执行 fn
+                fn.apply(this, args)
+            }, delay)
+        }
+    }
+    var count = 0
+    document.addEventListener('mousemove', debounce(() => log(++count), 1000), false)
+
+    var throttle = function (fn, threshhold) {
+        // 如果触发了多次相同的函数(fn),那么第一次触发后,将会执行一次,之后如果继续再触发(在 threshhold 内触发一次或多次),那么按照每隔 threshhold 时间,执行一次的频率继续执行
+
+        // 记录上次执行的时间
+        var last
+
+        // 定时器
+        var timer
+
+        // 返回的函数，每过 threshhold 毫秒就执行一次 fn 函数
+        return function (...args) {
+            var now = +new Date()
+            // 如果距离上次执行 fn 函数的时间小于 threshhold，那么就放弃
+            // 执行 fn，并重新计时
+            if (last && now < last + threshhold) {
+                clearTimeout(timer)
+                // 保证在当前时间区间结束后，再执行一次 fn
+                timer = setTimeout(() => {
+                    last = now
+                    fn.apply(this, args)
+                }, threshhold)
+            } else {
+                // 在时间区间的最开始和到达指定间隔的时候执行一次 fn
+                last = now
+                fn.apply(this, args)
+            }
+        }
+    }
+
+    var count = 0
+    document.addEventListener('mousemove', throttle(() => log(++count), 5000), false)
+</script>
+</body>
+</html>

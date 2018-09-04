@@ -1,7 +1,7 @@
 const log = console.log.bind(console)
 
-// 完成除 zipObjectDeep 的数组部分
-// 完成 Coleection 部分
+// Array 部分的 zipObjectDeep 未完成
+// Lang 部分 clone 未完成
 var liwenkang = {
     isEqual: function (value, other) {
         var typeOne = typeof value
@@ -1591,17 +1591,16 @@ var liwenkang = {
         }
     },
 
-    bind: function (func, ...partials) {
+    bind: function (func, thisArg, ...partials) {
         return function (...args) {
-            return func(...partials, ...args)
+            return func.bind(thisArg, ...partials)(...args)
         }
     },
 
-    bindKey: function (object, key, partials) {
-        var func = object[key]
-        return function (string) {
-            this.user = object.user
-            return func(partials, string)
+    bindKey: function (object, key, ...partials) {
+        return function (...args) {
+            var func = object[key]
+            return func.bind(object, ...partials)(...args)
         }
     },
 
@@ -1611,41 +1610,58 @@ var liwenkang = {
             if (length < arity) {
                 var result = liwenkang.curry(func.bind(null, ...args))
             } else if (length === arity) {
+                // 直到参数数量符合要求,再输出
                 var result = func(...args)
             }
             return result
         }
     },
 
-    curryRight: function (func, arity = func.length) {
+    curryRight: function (func, arity = func.length, input = []) {
         return function (...args) {
-            log(...args)
-            var length = arguments.length
-            if (length < arity) {
-                var result = liwenkang.curry(func.bind(null, ...args))
-            } else if (length === arity) {
-                var result = func(...args)
+            if (input.length < arity) {
+                input.unshift(...args)
+                if (input.length === arity) {
+                    var result = input.slice()
+                    input.length = 0
+                    return func(...result)
+                } else {
+                    return liwenkang.curryRight(func, arity, input)
+                }
             }
-            return result
         }
     },
 
-    debounce: function (func, [wait = 0], [options = {}]) {
+    debounce: function (func, wait = 0) {
+        var timer
+        return function (...args) {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                func.apply(this, args)
+            }, wait)
+        }
     },
 
-    defer: function (func, args) {
-
+    defer: function (func, ...args) {
+        setTimeout(() => {
+            func.apply(null, args)
+        }, 1)
     },
 
-    delay: function (func, wait, args) {
-
+    delay: function (func, wait, ...args) {
+        setTimeout(() => {
+            func.apply(null, args)
+        }, wait)
     },
 
     flip: function (func) {
         return function (...args) {
-            var arr = [].concat(...args).reverse()
-            return func(...arr)
+            return func(...[].concat(...args).reverse())
         }
+    },
+
+    memoize(func, resolver) {
+
     },
 
     values: function (object) {
@@ -1657,10 +1673,6 @@ var liwenkang = {
             result.push(object[i])
         }
         return result
-    },
-
-    memoize: function (func, resolver) {
-
     },
 
     negate: function (func) {
@@ -1686,10 +1698,12 @@ var liwenkang = {
     },
 
     partial: function (func, partials) {
+        // 没有考虑占位符
         return func.bind(null, partials)
     },
 
     partialRight: function (func, partials) {
+        // 没有考虑占位符
         return function (...args) {
             var func2 = func.bind(null, ...args)
             return func2(partials)
@@ -1707,15 +1721,9 @@ var liwenkang = {
         }
     },
 
-    rest: function (func, start = func.length - 1) {
-        return function () {
-
-        }
-    },
-
-    flip: function (func) {
-        return function (...args) {
-            return func(...args.reverse())
+    rest: function (func) {
+        return function (first, ...rest) {
+            return func.bind(null, first)(rest)
         }
     },
 
@@ -1725,13 +1733,26 @@ var liwenkang = {
         }
     },
 
-    throttle: function () {
-
+    throttle: function (func, wait) {
+        var last
+        var timer
+        return function (...args) {
+            var now = +new Date()
+            if (last && now < last + wait) {
+                clearTimeout(timer)
+                last = now
+                timer = setTimeout(() => {
+                    func.apply(this, args)
+                }, wait)
+            } else {
+                last = now
+                func.apply(this, args)
+            }
+        }
     },
 
     unary: function (func) {
-        return function (...arg) {
-            var value = [].concat(...arg)[0]
+        return function (arg) {
             return func(arg)
         }
     },
@@ -1753,30 +1774,21 @@ var liwenkang = {
 
     castArray: function (value) {
         if (arguments.length === 0) {
-            log([])
             return []
         }
         if (Array.isArray(value)) {
-            log(value)
             return value
         } else {
-            log([value])
             return [value]
         }
     },
 
     clone: function (value) {
-        if (Array.isArray(value)) {
-            var result = value.slice(0)
-            return result
-        } else if (typeof value === "object") {
-            return JSON.parse(JSON.stringify(value))
-        } else {
-            return value
-        }
+
     },
 
     cloneDeep: function (value) {
+
     },
 
     cloneDeepWith: function (value, customizer) {
@@ -1794,15 +1806,65 @@ var liwenkang = {
     },
 
     eq: function (value, other) {
-        if (typeof value !== typeof other) {
-            return false
-        }
-        if (typeof value === "number") {
-            if (value !== value && other !== other) {
+        if (typeof value === "number" && typeof other === "number") {
+            if (isNaN(value) && isNaN(other)) {
                 return true
-            } else {
-                return value === other
             }
         }
+        return value === other
+    },
+
+    gt(value, other) {
+        return value > other
+    },
+
+    gte(value, other) {
+        return value >= other
+    },
+
+    isArguments(value) {
+        return value.toString().slice(-10, -1) === "Arguments"
+    },
+
+    isArray(value) {
+        return Array.isArray(value)
+    },
+
+    isArrayBuffer(value) {
+        return value instanceof ArrayBuffer
+    },
+
+    isArrayLike(value) {
+        if (typeof value === "function") {
+            return false
+        }
+        if (value.length >= 0 && value.length < Number.MAX_SAFE_INTEGER) {
+            return true
+        }
+    },
+
+    isArrayLikeObject(value) {
+        return liwenkang.isArrayLike(value) && typeof value === "object"
+    },
+
+    isBoolean(value) {
+        return typeof value === "boolean"
+    },
+
+    isBuffer(value) {
+        return value instanceof Buffer
+    },
+
+    isDate(value) {
+        return value instanceof Date
+    },
+
+    isElement(value) {
+
+    },
+
+    isEmpty(value) {
+
     }
 }
+
