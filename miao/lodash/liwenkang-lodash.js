@@ -4,7 +4,7 @@ const log = console.log.bind(console)
 // Lang 部分 clone 未完成
 var liwenkang = {
     property: function (string) {
-        return obj => obj[string]
+        return obj => liwenkang.get(obj, string)
     },
 
     matchesProperty: function (array) {
@@ -79,12 +79,10 @@ var liwenkang = {
     },
 
     differenceWith: function (array, values, comparator) {
-
         var result = array.slice()
         if (comparator === undefined) {
             return result
         }
-
         for (var i = 0; i < result.length; i++) {
             for (var j = 0; j < values.length; j++) {
                 if (comparator(result[i], values[j])) {
@@ -349,6 +347,7 @@ var liwenkang = {
                 }
             }
         }
+        return array
     },
 
     pullAllWith: function (array, values, comparator) {
@@ -1211,556 +1210,556 @@ var liwenkang = {
         return result
     },
 
-    negate: function (func) {
-        return function (...args) {
-            return !func(...args)
-        }
-    },
-
-    once: function (func) {
-
-    },
-
-    overArgs(func, transforms) {
-        return function (...args) {
-            var result = []
-            var item = [].concat(...args)
-            var funcs = transforms
-            for (var i = 0; i < transforms.length; i++) {
-                result.push(funcs[i]([item[i]]))
-            }
-            return result
-        }
-    },
-
-
-    partial: function (func, partials) {
-        // 没有考虑占位符
-        return func.bind(null, partials)
-    },
-
-    partialRight: function (func, partials) {
-        // 没有考虑占位符
-        return function (...args) {
-            var func2 = func.bind(null, ...args)
-            return func2(partials)
-        }
-    },
-
-    rearg: function (func, indexes) {
-        return function (...args) {
-            var result = []
-            var item = [].concat(...args)
-            for (var i = 0; i < indexes.length; i++) {
-                result.push(item[indexes[i]])
-            }
-            return result
-        }
-    },
-
-    rest: function (func) {
-        return function (first, ...rest) {
-            return func.bind(null, first)(rest)
-        }
-    },
-
-    spread: function (func, start = 0) {
-        return function (ary) {
-            return func.apply(null, ary)
-        }
-    },
-
-    throttle: function (func, wait) {
-        var last
-        var timer
-        return function (...args) {
-            var now = +new Date()
-            if (last && now < last + wait) {
-                clearTimeout(timer)
-                last = now
-                timer = setTimeout(() => {
-                    func.apply(this, args)
-                }, wait)
-            } else {
-                last = now
-                func.apply(this, args)
-            }
-        }
-    },
-
-    unary: function (func) {
-        return function (arg) {
-            return func(arg)
-        }
-    },
-
-    wrap: function (value, wrapper) {
-        return function (string) {
-            return wrapper(value, string)
-        }
-    },
-
-    escape: function (string = '') {
-        string = string.replace(/&/g, "&amp;")
-        string = string.replace(/</g, "&lt;")
-        string = string.replace(/>/g, "&gt;")
-        string = string.replace(/"/g, "&quot;")
-        string = string.replace(/'/g, "&#39")
-        return string
-    },
-
-    castArray: function (value) {
-        if (arguments.length === 0) {
-            return []
-        }
-        if (Array.isArray(value)) {
-            return value
-        } else {
-            return [value]
-        }
-    },
-
-    clone: function (value) {
-
-    },
-
-    cloneDeep: function (value) {
-
-    },
-
-    cloneDeepWith: function (value, customizer) {
-
-    },
-
-    cloneWith: function (value, customizer) {
-
-    },
-
-    conformsTo: function (object, source) {
-        for (var props in source) {
-            return source[props](object[props])
-        }
-    },
-
-    eq: function (value, other) {
-        if (typeof value === "number" && typeof other === "number") {
-            if (isNaN(value) && isNaN(other)) {
-                return true
-            }
-        }
-        return value === other
-    },
-
-    gt(value, other) {
-        return value > other
-    },
-
-    gte(value, other) {
-        return value >= other
-    },
-
-    isArguments(value) {
-        return value.toString().slice(-10, -1) === "Arguments"
-    },
-
-    isArray(value) {
-        return Array.isArray(value)
-    },
-
-    isArrayBuffer(value) {
-        return value instanceof ArrayBuffer
-    },
-
-    isArrayLike(value) {
-        if (typeof value === "function") {
-            return false
-        }
-        if (value.length >= 0 && value.length < Number.MAX_SAFE_INTEGER) {
-            return true
-        }
-    },
-
-    isArrayLikeObject(value) {
-        return liwenkang.isArrayLike(value) && typeof value === "object"
-    },
-
-    isBoolean(value) {
-        return Object.prototype.toString.call(value) === '[object Boolean]'
-    },
-
-    isBuffer(value) {
-        return value instanceof Buffer
-    },
-
-    isDate(value) {
-        return value instanceof Date
-    },
-
-    isElement(value) {
-
-    },
-
-    isEmpty(value) {
-        if (Array.isArray(value)) {
-            if (value.length === 0) {
-                return true
-            } else {
-                return false
-            }
-        } else if (typeof value === "object") {
-            var flag = true
-            for (var i in value) {
-                flag = false
-            }
-            return flag
-        } else if (value instanceof Map) {
-            return value.size === 0
-        } else if (value instanceof Set) {
-            return value.size === 0
-        } else {
-            return true
-        }
-    },
-
-    isEqual: function (value, other) {
-        var typeOne = typeof value
-        var typeTwo = typeof other
-        if (typeOne !== typeTwo) {
-            return false
-        }
-        if (typeOne === "object") {
-            if (Array.isArray(value) && Array.isArray(other)) {
-                return value.toString() === other.toString()
-            } else if (Array.isArray(value) === false && Array.isArray(other) === false) {
-                for (var key in value) {
-                    if (!liwenkang.isEqual(value[key], other[key])) {
-                        return false
-                    }
-                }
-                for (var key in other) {
-                    if (!liwenkang.isEqual(value[key], other[key])) {
-                        return false
-                    }
-                }
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return value === other
-        }
-    },
-
-    isEqualWith(value, other, customizer) {
-        if (Array.isArray(value) && Array.isArray(other)) {
-            for (var i = 0; i < value.length; i++) {
-                if (customizer(value[i], other[i]) === undefined) {
-                    if (!liwenkang.isEqual(value[i], other[i])) {
-                        return false
-                    }
-                } else if (!customizer(value[i], other[i])) {
-                    return false
-                }
-            }
-            return true
-        }
-    },
-
-    isError(value) {
-        return value instanceof Error
-    },
-
-    isFinite(value) {
-        return Number.isFinite(value)
-    },
-
-    isFunction(value) {
-        return value instanceof Function
-    },
-
-    isInteger(value) {
-        return Number.isInteger(value)
-    },
-
-    isLength(value) {
-        if (typeof value === "number" && liwenkang.isInteger(value)) {
-            if (value >= 0 && value < Number.MAX_SAFE_INTEGER) {
-                return true
-            }
-        }
-        return false
-    },
-
-    isMap(value) {
-        return value instanceof Map
-    },
-
-    isMatch(object, source) {
-        if (typeof object === "object") {
-            for (var key in source) {
-                if (!liwenkang.isEqual(source[key], object[key])) {
-                    return false
-                }
-            }
-            return true
-        }
-    },
-
-    isMatchWith(object, source, customizer) {
-
-    },
-
-    isNaN(value) {
-        if (value === undefined) {
-            return false
-        }
-        if (typeof value !== "number") {
-            return true
-        }
-        return isNaN(value)
-    },
-
-    isNative(value) {
-
-    },
-
-    isNil(value) {
-        return value === null || value === undefined
-    },
-
-    isNull(value) {
-        return value === null
-    },
-
-    isNumber(value) {
-        return typeof value === "number"
-    },
-
-    isObject(value) {
-        if (value === null) {
-            return false
-        }
-        if (value === undefined) {
-            return true
-        }
-        if (typeof value === "function") {
-            return true
-        }
-        return typeof value === "object"
-    },
-
-    isObjectLike(value) {
-        if (value !== null && typeof value === "object") {
-            return true
-        } else {
-            return false
-        }
-    },
-
-    isPlainObject(value) {
-        if (Object.prototype.constructor === value.constructor) {
-            return true
-        }
-        return typeof value === "object" && value.constructor === undefined
-    },
-
-    noop: undefined,
-
-    isRegExp(value) {
-        return value instanceof RegExp
-    },
-
-    isSafeInteger(value) {
-        return Number.isSafeInteger(value)
-    },
-
-    isSet(value) {
-        return value instanceof Set
-    },
-
-    isString(value) {
-        return typeof value === "string"
-    },
-
-    isSymbol(value) {
-        return typeof value === "symbol"
-    },
-
-    isTypedArray(value) {
-
-    },
-
-    isUndefined(value) {
-        return value === undefined
-    },
-
-    isWeakMap(value) {
-        return value instanceof WeakMap
-    },
-
-    isWeakSet(value) {
-        return value instanceof WeakSet
-    },
-
-    lt(value, other) {
-        return value < other
-    },
-
-    lte(value, other) {
-        return value <= other
-    },
-
-    toArray(value) {
-        if (typeof value === "object") {
-            var result = []
-            for (var key in value) {
-                result.push(value[key])
-            }
-            return result
-        }
-        if (value === null || value === undefined) {
-            return []
-        }
-        return Array.from(value)
-    },
-
-    toFinite(value) {
-        if (value === Infinity) {
-            return 1.7976931348623157e+308
-        }
-        return Number(value)
-    },
-
-    toInteger(value) {
-        return liwenkang.toFinite(Math.floor(value))
-    },
-
-    toLength(value) {
-
-    },
-
-    toNumber(value) {
-        return Number(value)
-    },
-
-    toPlainObject(value) {
-
-    },
-
-    toSafeInteger(value) {
-        if (value > Number.MAX_SAFE_INTEGER) {
-            return Number.MAX_SAFE_INTEGER
-        } else if (value < Number.MIN_SAFE_INTEGER) {
-            return Number.MIN_SAFE_INTEGER
-        } else {
-            return Math.floor(value)
-        }
-    },
-
-    toString(value) {
-        if (value === null || value === undefined) {
-            return ""
-        }
-        if (value === -0) {
-            return "-0"
-        }
-        return value.toString()
-    },
-
-    add(augend, addend) {
-        return augend + addend
-    },
-
-    ceil(number, precision = 0) {
-        number = number * Math.pow(10, precision)
-        return Math.ceil(number) / Math.pow(10, precision)
-    },
-
-    divide(dividend, divisor) {
-        return dividend / divisor
-    },
-
-    floor(number, precision = 0) {
-        number = number * Math.pow(10, precision)
-        return Math.floor(number) / Math.pow(10, precision)
-    },
-
-    max(array) {
-        if (array.length === 0) {
-            return undefined
-        }
-        return Math.max(...array)
-    },
-
-    maxBy(array, iteratee) {
-        var max = -Infinity
-        var result
-        for (var i = 0; i < array.length; i++) {
-            if (liwenkang.identity(iteratee)(array[i]) > max) {
-                max = liwenkang.identity(iteratee)(array[i])
-                result = array[i]
-            }
-        }
-        return result
-    },
-
-    mean(array) {
-        return liwenkang.sum(array) / array.length
-    },
-
-    meanBy(array, iteratee) {
-        var result = []
-        for (var i = 0; i < array.length; i++) {
-            result.push(liwenkang.identity(iteratee)(array[i]))
-        }
-        return liwenkang.mean(result)
-    },
-
-    min(array) {
-        if (array.length === 0) {
-            return undefined
-        }
-        return Math.min(...array)
-    },
-
-    minBy(array, iteratee) {
-        var min = Infinity
-        var result
-        for (var i = 0; i < array.length; i++) {
-            if (liwenkang.identity(iteratee)(array[i]) < min) {
-                min = liwenkang.identity(iteratee)(array[i])
-                result = array[i]
-            }
-        }
-        return result
-    },
-
-    multiply(multiplier, multiplicand) {
-        return multiplier * multiplicand
-    },
-
-    round(number, precision = 0) {
-        number = number * Math.pow(10, precision)
-        return Math.round(number) / Math.pow(10, precision)
-    },
-
-    subtract(minuend, subtrahend) {
-        return minuend - subtrahend
-    },
-
-    sum: function (ary) {
-        var result = 0
-        for (var i = 0; i < ary.length; i++) {
-            result += ary[i]
-        }
-        return result
-    },
-
-    sumBy: function (ary, iteratee) {
-        var sum = 0
-        for (var i = 0; i < ary.length; i++) {
-            sum += liwenkang.identity(iteratee)(ary[i])
-        }
-        return sum
-    }
+    // negate: function (func) {
+    //     return function (...args) {
+    //         return !func(...args)
+    //     }
+    // },
+    //
+    // once: function (func) {
+    //
+    // },
+    //
+    // overArgs(func, transforms) {
+    //     return function (...args) {
+    //         var result = []
+    //         var item = [].concat(...args)
+    //         var funcs = transforms
+    //         for (var i = 0; i < transforms.length; i++) {
+    //             result.push(funcs[i]([item[i]]))
+    //         }
+    //         return result
+    //     }
+    // },
+    //
+    //
+    // partial: function (func, partials) {
+    //     // 没有考虑占位符
+    //     return func.bind(null, partials)
+    // },
+    //
+    // partialRight: function (func, partials) {
+    //     // 没有考虑占位符
+    //     return function (...args) {
+    //         var func2 = func.bind(null, ...args)
+    //         return func2(partials)
+    //     }
+    // },
+    //
+    // rearg: function (func, indexes) {
+    //     return function (...args) {
+    //         var result = []
+    //         var item = [].concat(...args)
+    //         for (var i = 0; i < indexes.length; i++) {
+    //             result.push(item[indexes[i]])
+    //         }
+    //         return result
+    //     }
+    // },
+    //
+    // rest: function (func) {
+    //     return function (first, ...rest) {
+    //         return func.bind(null, first)(rest)
+    //     }
+    // },
+    //
+    // spread: function (func, start = 0) {
+    //     return function (ary) {
+    //         return func.apply(null, ary)
+    //     }
+    // },
+    //
+    // throttle: function (func, wait) {
+    //     var last
+    //     var timer
+    //     return function (...args) {
+    //         var now = +new Date()
+    //         if (last && now < last + wait) {
+    //             clearTimeout(timer)
+    //             last = now
+    //             timer = setTimeout(() => {
+    //                 func.apply(this, args)
+    //             }, wait)
+    //         } else {
+    //             last = now
+    //             func.apply(this, args)
+    //         }
+    //     }
+    // },
+    //
+    // unary: function (func) {
+    //     return function (arg) {
+    //         return func(arg)
+    //     }
+    // },
+    //
+    // wrap: function (value, wrapper) {
+    //     return function (string) {
+    //         return wrapper(value, string)
+    //     }
+    // },
+    //
+    // escape: function (string = '') {
+    //     string = string.replace(/&/g, "&amp;")
+    //     string = string.replace(/</g, "&lt;")
+    //     string = string.replace(/>/g, "&gt;")
+    //     string = string.replace(/"/g, "&quot;")
+    //     string = string.replace(/'/g, "&#39")
+    //     return string
+    // },
+    //
+    // castArray: function (value) {
+    //     if (arguments.length === 0) {
+    //         return []
+    //     }
+    //     if (Array.isArray(value)) {
+    //         return value
+    //     } else {
+    //         return [value]
+    //     }
+    // },
+    //
+    // clone: function (value) {
+    //
+    // },
+    //
+    // cloneDeep: function (value) {
+    //
+    // },
+    //
+    // cloneDeepWith: function (value, customizer) {
+    //
+    // },
+    //
+    // cloneWith: function (value, customizer) {
+    //
+    // },
+    //
+    // conformsTo: function (object, source) {
+    //     for (var props in source) {
+    //         return source[props](object[props])
+    //     }
+    // },
+    //
+    // eq: function (value, other) {
+    //     if (typeof value === "number" && typeof other === "number") {
+    //         if (isNaN(value) && isNaN(other)) {
+    //             return true
+    //         }
+    //     }
+    //     return value === other
+    // },
+    //
+    // gt(value, other) {
+    //     return value > other
+    // },
+    //
+    // gte(value, other) {
+    //     return value >= other
+    // },
+    //
+    // isArguments(value) {
+    //     return value.toString().slice(-10, -1) === "Arguments"
+    // },
+    //
+    // isArray(value) {
+    //     return Array.isArray(value)
+    // },
+    //
+    // isArrayBuffer(value) {
+    //     return value instanceof ArrayBuffer
+    // },
+    //
+    // isArrayLike(value) {
+    //     if (typeof value === "function") {
+    //         return false
+    //     }
+    //     if (value.length >= 0 && value.length < Number.MAX_SAFE_INTEGER) {
+    //         return true
+    //     }
+    // },
+    //
+    // isArrayLikeObject(value) {
+    //     return liwenkang.isArrayLike(value) && typeof value === "object"
+    // },
+    //
+    // isBoolean(value) {
+    //     return Object.prototype.toString.call(value) === '[object Boolean]'
+    // },
+    //
+    // isBuffer(value) {
+    //     return value instanceof Buffer
+    // },
+    //
+    // isDate(value) {
+    //     return value instanceof Date
+    // },
+    //
+    // isElement(value) {
+    //
+    // },
+    //
+    // isEmpty(value) {
+    //     if (Array.isArray(value)) {
+    //         if (value.length === 0) {
+    //             return true
+    //         } else {
+    //             return false
+    //         }
+    //     } else if (typeof value === "object") {
+    //         var flag = true
+    //         for (var i in value) {
+    //             flag = false
+    //         }
+    //         return flag
+    //     } else if (value instanceof Map) {
+    //         return value.size === 0
+    //     } else if (value instanceof Set) {
+    //         return value.size === 0
+    //     } else {
+    //         return true
+    //     }
+    // },
+    //
+    // isEqual: function (value, other) {
+    //     var typeOne = typeof value
+    //     var typeTwo = typeof other
+    //     if (typeOne !== typeTwo) {
+    //         return false
+    //     }
+    //     if (typeOne === "object") {
+    //         if (Array.isArray(value) && Array.isArray(other)) {
+    //             return value.toString() === other.toString()
+    //         } else if (Array.isArray(value) === false && Array.isArray(other) === false) {
+    //             for (var key in value) {
+    //                 if (!liwenkang.isEqual(value[key], other[key])) {
+    //                     return false
+    //                 }
+    //             }
+    //             for (var key in other) {
+    //                 if (!liwenkang.isEqual(value[key], other[key])) {
+    //                     return false
+    //                 }
+    //             }
+    //             return true
+    //         } else {
+    //             return false
+    //         }
+    //     } else {
+    //         return value === other
+    //     }
+    // },
+    //
+    // isEqualWith(value, other, customizer) {
+    //     if (Array.isArray(value) && Array.isArray(other)) {
+    //         for (var i = 0; i < value.length; i++) {
+    //             if (customizer(value[i], other[i]) === undefined) {
+    //                 if (!liwenkang.isEqual(value[i], other[i])) {
+    //                     return false
+    //                 }
+    //             } else if (!customizer(value[i], other[i])) {
+    //                 return false
+    //             }
+    //         }
+    //         return true
+    //     }
+    // },
+    //
+    // isError(value) {
+    //     return value instanceof Error
+    // },
+    //
+    // isFinite(value) {
+    //     return Number.isFinite(value)
+    // },
+    //
+    // isFunction(value) {
+    //     return value instanceof Function
+    // },
+    //
+    // isInteger(value) {
+    //     return Number.isInteger(value)
+    // },
+    //
+    // isLength(value) {
+    //     if (typeof value === "number" && liwenkang.isInteger(value)) {
+    //         if (value >= 0 && value < Number.MAX_SAFE_INTEGER) {
+    //             return true
+    //         }
+    //     }
+    //     return false
+    // },
+    //
+    // isMap(value) {
+    //     return value instanceof Map
+    // },
+    //
+    // isMatch(object, source) {
+    //     if (typeof object === "object") {
+    //         for (var key in source) {
+    //             if (!liwenkang.isEqual(source[key], object[key])) {
+    //                 return false
+    //             }
+    //         }
+    //         return true
+    //     }
+    // },
+    //
+    // isMatchWith(object, source, customizer) {
+    //
+    // },
+    //
+    // isNaN(value) {
+    //     if (value === undefined) {
+    //         return false
+    //     }
+    //     if (typeof value !== "number") {
+    //         return true
+    //     }
+    //     return isNaN(value)
+    // },
+    //
+    // isNative(value) {
+    //
+    // },
+    //
+    // isNil(value) {
+    //     return value === null || value === undefined
+    // },
+    //
+    // isNull(value) {
+    //     return value === null
+    // },
+    //
+    // isNumber(value) {
+    //     return typeof value === "number"
+    // },
+    //
+    // isObject(value) {
+    //     if (value === null) {
+    //         return false
+    //     }
+    //     if (value === undefined) {
+    //         return true
+    //     }
+    //     if (typeof value === "function") {
+    //         return true
+    //     }
+    //     return typeof value === "object"
+    // },
+    //
+    // isObjectLike(value) {
+    //     if (value !== null && typeof value === "object") {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // },
+    //
+    // isPlainObject(value) {
+    //     if (Object.prototype.constructor === value.constructor) {
+    //         return true
+    //     }
+    //     return typeof value === "object" && value.constructor === undefined
+    // },
+    //
+    // noop: undefined,
+    //
+    // isRegExp(value) {
+    //     return value instanceof RegExp
+    // },
+    //
+    // isSafeInteger(value) {
+    //     return Number.isSafeInteger(value)
+    // },
+    //
+    // isSet(value) {
+    //     return value instanceof Set
+    // },
+    //
+    // isString(value) {
+    //     return typeof value === "string"
+    // },
+    //
+    // isSymbol(value) {
+    //     return typeof value === "symbol"
+    // },
+    //
+    // isTypedArray(value) {
+    //
+    // },
+    //
+    // isUndefined(value) {
+    //     return value === undefined
+    // },
+    //
+    // isWeakMap(value) {
+    //     return value instanceof WeakMap
+    // },
+    //
+    // isWeakSet(value) {
+    //     return value instanceof WeakSet
+    // },
+    //
+    // lt(value, other) {
+    //     return value < other
+    // },
+    //
+    // lte(value, other) {
+    //     return value <= other
+    // },
+    //
+    // toArray(value) {
+    //     if (typeof value === "object") {
+    //         var result = []
+    //         for (var key in value) {
+    //             result.push(value[key])
+    //         }
+    //         return result
+    //     }
+    //     if (value === null || value === undefined) {
+    //         return []
+    //     }
+    //     return Array.from(value)
+    // },
+    //
+    // toFinite(value) {
+    //     if (value === Infinity) {
+    //         return 1.7976931348623157e+308
+    //     }
+    //     return Number(value)
+    // },
+    //
+    // toInteger(value) {
+    //     return liwenkang.toFinite(Math.floor(value))
+    // },
+    //
+    // toLength(value) {
+    //
+    // },
+    //
+    // toNumber(value) {
+    //     return Number(value)
+    // },
+    //
+    // toPlainObject(value) {
+    //
+    // },
+    //
+    // toSafeInteger(value) {
+    //     if (value > Number.MAX_SAFE_INTEGER) {
+    //         return Number.MAX_SAFE_INTEGER
+    //     } else if (value < Number.MIN_SAFE_INTEGER) {
+    //         return Number.MIN_SAFE_INTEGER
+    //     } else {
+    //         return Math.floor(value)
+    //     }
+    // },
+    //
+    // toString(value) {
+    //     if (value === null || value === undefined) {
+    //         return ""
+    //     }
+    //     if (value === -0) {
+    //         return "-0"
+    //     }
+    //     return value.toString()
+    // },
+    //
+    // add(augend, addend) {
+    //     return augend + addend
+    // },
+    //
+    // ceil(number, precision = 0) {
+    //     number = number * Math.pow(10, precision)
+    //     return Math.ceil(number) / Math.pow(10, precision)
+    // },
+    //
+    // divide(dividend, divisor) {
+    //     return dividend / divisor
+    // },
+    //
+    // floor(number, precision = 0) {
+    //     number = number * Math.pow(10, precision)
+    //     return Math.floor(number) / Math.pow(10, precision)
+    // },
+    //
+    // max(array) {
+    //     if (array.length === 0) {
+    //         return undefined
+    //     }
+    //     return Math.max(...array)
+    // },
+    //
+    // maxBy(array, iteratee) {
+    //     var max = -Infinity
+    //     var result
+    //     for (var i = 0; i < array.length; i++) {
+    //         if (liwenkang.identity(iteratee)(array[i]) > max) {
+    //             max = liwenkang.identity(iteratee)(array[i])
+    //             result = array[i]
+    //         }
+    //     }
+    //     return result
+    // },
+    //
+    // mean(array) {
+    //     return liwenkang.sum(array) / array.length
+    // },
+    //
+    // meanBy(array, iteratee) {
+    //     var result = []
+    //     for (var i = 0; i < array.length; i++) {
+    //         result.push(liwenkang.identity(iteratee)(array[i]))
+    //     }
+    //     return liwenkang.mean(result)
+    // },
+    //
+    // min(array) {
+    //     if (array.length === 0) {
+    //         return undefined
+    //     }
+    //     return Math.min(...array)
+    // },
+    //
+    // minBy(array, iteratee) {
+    //     var min = Infinity
+    //     var result
+    //     for (var i = 0; i < array.length; i++) {
+    //         if (liwenkang.identity(iteratee)(array[i]) < min) {
+    //             min = liwenkang.identity(iteratee)(array[i])
+    //             result = array[i]
+    //         }
+    //     }
+    //     return result
+    // },
+    //
+    // multiply(multiplier, multiplicand) {
+    //     return multiplier * multiplicand
+    // },
+    //
+    // round(number, precision = 0) {
+    //     number = number * Math.pow(10, precision)
+    //     return Math.round(number) / Math.pow(10, precision)
+    // },
+    //
+    // subtract(minuend, subtrahend) {
+    //     return minuend - subtrahend
+    // },
+    //
+    // sum: function (ary) {
+    //     var result = 0
+    //     for (var i = 0; i < ary.length; i++) {
+    //         result += ary[i]
+    //     }
+    //     return result
+    // },
+    //
+    // sumBy: function (ary, iteratee) {
+    //     var sum = 0
+    //     for (var i = 0; i < ary.length; i++) {
+    //         sum += liwenkang.identity(iteratee)(ary[i])
+    //     }
+    //     return sum
+    // }
 }
