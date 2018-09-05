@@ -31,6 +31,18 @@ var liwenkang = {
         }
     },
 
+    identity: function (item) {
+        if (typeof item === "function") {
+            return item
+        } else if (typeof item === "string") {
+            return liwenkang.property(item)
+        } else if (Array.isArray(item)) {
+            return liwenkang.matchesProperty(item)
+        } else if (typeof  item === "object") {
+            return liwenkang.matches(item)
+        }
+    },
+
     chunk: function (array, size) {
         var result = []
         for (var i = 0; i < array.length; i += size) {
@@ -85,53 +97,22 @@ var liwenkang = {
         return result
     },
 
-    differenceBy: function (array, values, iteratee) {
-        var allArray = []
-        var funcFlag = false
-        var propFlag = false
-        if (typeof arguments[arguments.length - 1] === "string") {
-            propFlag = true
-            var property = arguments[arguments.length - 1]
-        } else if (typeof arguments[arguments.length - 1] === "function") {
-            funcFlag = true
-            var func = arguments[arguments.length - 1]
-        }
-
-        for (var i = 1; i < arguments.length; i++) {
-            if (typeof arguments[i] === "object") {
-                allArray = allArray.concat(arguments[i])
-            }
-        }
-
-        if (funcFlag) {
-            for (var i = 0; i < allArray.length; i++) {
-                allArray[i] = func(allArray[i])
-            }
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(func(array[i]))) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-        } else if (propFlag) {
-            for (var i = 0; i < allArray.length; i++) {
-                allArray[i] = allArray[i][property]
-            }
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(array[i][property])) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
+    differenceBy: function (array, ...args) {
+        if (Array.isArray(args[args.length - 1])) {
+            // 没有最后一项
+            var rest = [].concat(...Array.from(args))
+            return array.filter(value => {
+                return !rest.includes(value)
+            })
         } else {
-            for (var i = 0; i < array.length; i++) {
-                if (allArray.includes(array[i])) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
+            // 有最后一项
+            var iteratee = liwenkang.identity(args[args.length - 1])
+            var rest = [].concat(...Array.from(args).slice(0, args.length - 1))
+            rest = rest.map(value => iteratee(value))
+            return array.filter(value => {
+                return !rest.includes(iteratee(value))
+            })
         }
-        return array
     },
 
     drop: function (array, n = 1) {
@@ -147,48 +128,12 @@ var liwenkang = {
 
     dropWhile: function (array, predicate) {
         var newArray = array.slice(0)
-        if (typeof predicate === "function") {
-            for (var i = 0; i < newArray.length; i++) {
-                if (predicate(newArray[i])) {
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (Array.isArray(predicate)) {
-            for (var i = 0; i < newArray.length; i++) {
-                if (liwenkang.matchesProperty(predicate)(newArray[i])) {
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "object") {
-            for (var i = 0; i < newArray.length; i++) {
-                if (liwenkang.matches(predicate)(newArray[i])) {
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
-            }
-        } else if (typeof predicate === "string") {
-            for (var i = 0; i < newArray.length; i++) {
-                var flag = false
-                var obj = newArray[i]
-                for (var props in obj) {
-                    if (props === liwenkang.property(predicate)(obj)) {
-                        flag = false
-                    }
-                }
-                if (flag) {
-                    newArray.splice(i, 1)
-                    i--
-                } else {
-                    break
-                }
+        for (var i = 0; i < newArray.length; i++) {
+            if (liwenkang.identity(predicate)(newArray[i])) {
+                newArray.splice(i, 1)
+                i--
+            } else {
+                break
             }
         }
         return newArray
@@ -207,67 +152,21 @@ var liwenkang = {
     },
 
     findIndex: function (array, predicate, fromIndex = 0) {
-        if (typeof predicate === "function") {
-            for (var i = fromIndex; i < array.length; i++) {
-                if (predicate(array[i])) {
-                    return i
-                }
+        for (var i = fromIndex; i < array.length; i++) {
+            if (liwenkang.identity(predicate)(array[i])) {
+                return i
             }
-            return -1
-        } else if (typeof predicate === "string") {
-            for (var i = fromIndex; i < array.length; i++) {
-                if (liwenkang.property(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
-        } else if (Array.isArray(predicate)) {
-            for (var i = fromIndex; i < array.length; i++) {
-                if (liwenkang.matchesProperty(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
-        } else if (typeof predicate === "object") {
-            for (var i = fromIndex; i < array.length; i++) {
-                if (liwenkang.matches(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
         }
+        return -1
     },
 
     findLastIndex: function (array, predicate, fromIndex = array.length - 1) {
-        if (typeof predicate === "function") {
-            for (var i = fromIndex; i >= 0; i--) {
-                if (predicate(array[i])) {
-                    return i
-                }
+        for (var i = fromIndex; i >= 0; i--) {
+            if (liwenkang.identity(predicate)(array[i])) {
+                return i
             }
-            return -1
-        } else if (typeof predicate === "string") {
-            for (var i = fromIndex; i >= 0; i--) {
-                if (liwenkang.property(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
-        } else if (Array.isArray(predicate)) {
-            for (var i = fromIndex; i >= 0; i--) {
-                if (liwenkang.matchesProperty(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
-        } else if (typeof predicate === "object") {
-            for (var i = fromIndex; i >= 0; i--) {
-                if (liwenkang.matches(predicate)(array[i])) {
-                    return i
-                }
-            }
-            return -1
         }
+        return -1
     },
 
     flatten: function (array) {
@@ -347,33 +246,18 @@ var liwenkang = {
     intersectionBy: function (...args) {
         var iteratee = args[args.length - 1]
         var restArray = [].concat(...Array.from(args).slice(1, args.length - 1))
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < restArray.length; i++) {
-                restArray[i] = iteratee(restArray[i])
-            }
-            var array = Array.from(args[0])
-            for (var i = 0; i < array.length; i++) {
-                var needCheck = iteratee(array[i])
-                if (!restArray.includes(needCheck)) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-            return array
-        } else if (typeof iteratee === "string") {
-            for (var i = 0; i < restArray.length; i++) {
-                restArray[i] = liwenkang.property(iteratee)(restArray[i])
-            }
-            var array = Array.from(args[0])
-            for (var i = 0; i < array.length; i++) {
-                var needCheck = liwenkang.property(iteratee)(array[i])
-                if (!restArray.includes(needCheck)) {
-                    array.splice(i, 1)
-                    i--
-                }
-            }
-            return array
+        for (var i = 0; i < restArray.length; i++) {
+            restArray[i] = liwenkang.identity(iteratee)(restArray[i])
         }
+        var array = Array.from(args[0])
+        for (var i = 0; i < array.length; i++) {
+            var needCheck = liwenkang.identity(iteratee)(array[i])
+            if (!restArray.includes(needCheck)) {
+                array.splice(i, 1)
+                i--
+            }
+        }
+        return array
     },
 
     intersectionWith: function (arrays, comparator) {
@@ -456,28 +340,15 @@ var liwenkang = {
     },
 
     pullAllBy: function (array, values, iteratee) {
-        if (typeof iteratee === "string") {
-            for (var i = 0; i < array.length; i++) {
-                for (var j = 0; j < values.length; j++) {
-                    if (liwenkang.property(iteratee)(array[i]) === liwenkang.property(iteratee)(values[j])) {
-                        array.splice(i, 1)
-                        i--
-                        break
-                    }
-                }
-            }
-        } else if (typeof iteratee === "function") {
-            for (var i = 0; i < array.length; i++) {
-                for (var j = 0; j < values.length; j++) {
-                    if (iteratee(array[i]) === iteratee(values[j])) {
-                        array.splice(i, 1)
-                        i--
-                        break
-                    }
+        for (var i = 0; i < array.length; i++) {
+            for (var j = 0; j < values.length; j++) {
+                if (liwenkang.identity(iteratee)(array[i]) === liwenkang.identity(iteratee)(values[j])) {
+                    array.splice(i, 1)
+                    i--
+                    break
                 }
             }
         }
-        return array
     },
 
     pullAllWith: function (array, values, comparator) {
@@ -510,7 +381,7 @@ var liwenkang = {
     remove: function (array, predicate) {
         var result = []
         for (var i = 0; i < array.length; i++) {
-            if (predicate(array[i])) {
+            if (liwenkang.identity(predicate)(array[i])) {
                 result.push(array[i])
                 array.splice(i, 1)
                 i--
@@ -556,21 +427,12 @@ var liwenkang = {
     },
 
     sortedIndexBy: function (array, value, iteratee) {
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < array.length; i++) {
-                if (iteratee(array[i]) === iteratee(value)) {
-                    return i
-                }
+        for (var i = 0; i < array.length; i++) {
+            if (liwenkang.identity(iteratee)(array[i]) === liwenkang.identity(iteratee)(value)) {
+                return i
             }
-            return -1
-        } else if (typeof iteratee === "string") {
-            for (var i = 0; i < array.length; i++) {
-                if (liwenkang.property(iteratee)(array[i]) === liwenkang.property(iteratee)(value)) {
-                    return i
-                }
-            }
-            return -1
         }
+        return -1
     },
 
     sortedIndexOf: function (array, value) {
@@ -587,21 +449,12 @@ var liwenkang = {
     },
 
     sortedLastIndexBy(array, value, iteratee) {
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < array.length; i++) {
-                if (iteratee(array[i]) > iteratee(value)) {
-                    return i
-                }
+        for (var i = 0; i < array.length; i++) {
+            if (liwenkang.identity(iteratee)(array[i]) > liwenkang.identity(iteratee)(value)) {
+                return i
             }
-            return array.length
-        } else if (typeof  iteratee === "string") {
-            for (var i = 0; i < array.length; i++) {
-                if (liwenkang.property(iteratee)(array[i]) > liwenkang.property(iteratee)(value)) {
-                    return i
-                }
-            }
-            return array.length
         }
+        return array.length
     },
 
     sortedLastIndexOf(array, value) {
@@ -627,7 +480,7 @@ var liwenkang = {
     sortedUniqBy: function (array, iteratee) {
         var result = array.slice(0)
         for (var i = 1; i < result.length; i++) {
-            if (iteratee(result[i]) === iteratee(result[i - 1])) {
+            if (liwenkang.identity(iteratee)(result[i]) === liwenkang.identity(iteratee)(result[i - 1])) {
                 result.splice(i, 1)
                 i--
             }
@@ -656,83 +509,25 @@ var liwenkang = {
     },
 
     takeRightWhile: function (array, predicate) {
-        if (typeof predicate === "function") {
-            var index = 0
-            for (var i = array.length - 1; i >= 0; i--) {
-                if (!predicate(array[i])) {
-                    index = i
-                    break
-                }
+        var index = 0
+        for (var i = array.length - 1; i >= 0; i--) {
+            if (!liwenkang.identity(predicate)(array[i])) {
+                index = i
+                break
             }
-            return array.slice(index + 1)
-        } else if (typeof predicate === "string") {
-            var index = 0
-            for (var i = array.length - 1; i >= 0; i--) {
-                if (!liwenkang.property(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(index + 1)
-        } else if (Array.isArray(predicate)) {
-            var index = 0
-            for (var i = array.length - 1; i >= 0; i--) {
-                if (!liwenkang.matchesProperty(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(index + 1)
-        } else if (typeof predicate === "object") {
-            var index = 0
-            for (var i = array.length - 1; i >= 0; i--) {
-                if (!liwenkang.matches(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(index + 1)
         }
+        return array.slice(index + 1)
     },
 
     takeWhile: function (array, predicate) {
-        if (typeof predicate === "function") {
-            var index = 0
-            for (var i = 0; i < array.length; i++) {
-                if (!predicate(array[i])) {
-                    index = i
-                    break
-                }
+        var index = 0
+        for (var i = 0; i < array.length; i++) {
+            if (!liwenkang.identity(predicate)(array[i])) {
+                index = i
+                break
             }
-            return array.slice(0, index)
-        } else if (typeof predicate === "string") {
-            var index = 0
-            for (var i = 0; i < array.length; i++) {
-                if (!liwenkang.property(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(0, index)
-        } else if (Array.isArray(predicate)) {
-            var index = 0
-            for (var i = 0; i < array.length; i++) {
-                if (!liwenkang.matchesProperty(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(0, index)
-        } else if (typeof predicate === "object") {
-            var index = 0
-            for (var i = 0; i < array.length; i++) {
-                if (!liwenkang.matches(predicate)(array[i])) {
-                    index = i
-                    break
-                }
-            }
-            return array.slice(0, index)
         }
+        return array.slice(0, index)
     },
 
     union: function (...args) {
@@ -740,31 +535,19 @@ var liwenkang = {
         return Array.from(new Set(result))
     },
 
+
     unionBy: function (...args) {
         var iteratee = args[args.length - 1]
         var array = [].concat(...args).slice(0, args.length)
-
-        if (typeof  iteratee === "function") {
-            for (var i = 0; i < array.length; i++) {
-                for (var j = i + 1; j < array.length; j++) {
-                    if (iteratee(array[i]) === iteratee(array[j])) {
-                        array.splice(j, 1)
-                        j--
-                    }
+        for (var i = 0; i < array.length; i++) {
+            for (var j = i + 1; j < array.length; j++) {
+                if (liwenkang.identity(iteratee)(array[i]) === liwenkang.identity(iteratee)(array[j])) {
+                    array.splice(j, 1)
+                    j--
                 }
             }
-            return array
-        } else if (typeof iteratee === "string") {
-            for (var i = 0; i < array.length; i++) {
-                for (var j = i + 1; j < array.length; j++) {
-                    if (liwenkang.property(iteratee)(array[i]) === liwenkang.property(iteratee)(array[j])) {
-                        array.splice(j, 1)
-                        j--
-                    }
-                }
-            }
-            return array
         }
+        return array
     },
 
     unionWith: function (...args) {
@@ -790,27 +573,15 @@ var liwenkang = {
 
     uniqBy: function (array, iteratee) {
         var newArray = array.slice()
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < newArray.length; i++) {
-                for (var j = i + 1; j < newArray.length; j++) {
-                    if (iteratee(newArray[i]) === iteratee(newArray[j])) {
-                        newArray.splice(j, 1)
-                        j--
-                    }
+        for (var i = 0; i < newArray.length; i++) {
+            for (var j = i + 1; j < newArray.length; j++) {
+                if (liwenkang.identity(iteratee)(newArray[i]) === liwenkang.identity(iteratee)(newArray[j])) {
+                    newArray.splice(j, 1)
+                    j--
                 }
             }
-            return newArray
-        } else if (typeof iteratee === "string") {
-            for (var i = 0; i < newArray.length; i++) {
-                for (var j = i + 1; j < newArray.length; j++) {
-                    if (liwenkang.property(iteratee)(newArray[i]) === liwenkang.property(iteratee)(newArray[j])) {
-                        newArray.splice(j, 1)
-                        j--
-                    }
-                }
-            }
-            return newArray
         }
+        return newArray
     },
 
     uniqWith: function (array, comparator) {
@@ -846,7 +617,7 @@ var liwenkang = {
         var arr1 = array[1]
         var result = []
         for (var i = 0; i < arr0.length; i++) {
-            result.push(iteratee(arr0[i], arr1[i]))
+            result.push(liwenkang.identity(iteratee)(arr0[i], arr1[i]))
         }
         return result
     },
@@ -881,44 +652,25 @@ var liwenkang = {
         return allArray
     },
 
+
     xorBy: function (...args) {
         var iteratee = args[args.length - 1]
         var arr = [].concat(...args.slice(0, args.length - 1))
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < arr.length; i++) {
-                var item = iteratee(arr[i])
-                var flag = false
-                for (var j = i + 1; j < arr.length; j++) {
-                    if (iteratee(arr[j]) === item) {
-                        flag = true
-                        arr.splice(j, 1)
-                        j--
-                    }
-                }
-                if (flag) {
-                    arr.splice(i, 1)
-                    i--
+        for (var i = 0; i < arr.length; i++) {
+            var flag = false
+            for (var j = i + 1; j < arr.length; j++) {
+                if (liwenkang.identity(iteratee)(arr[j]) === liwenkang.identity(iteratee)(arr[i])) {
+                    flag = true
+                    arr.splice(j, 1)
+                    j--
                 }
             }
-            return arr
-        } else if (typeof  iteratee === "string") {
-            for (var i = 0; i < arr.length; i++) {
-                var item = liwenkang.property(iteratee)(arr[i])
-                var flag = false
-                for (var j = i + 1; j < arr.length; j++) {
-                    if (liwenkang.property(iteratee)(arr[j]) === item) {
-                        flag = true
-                        arr.splice(j, 1)
-                        j--
-                    }
-                }
-                if (flag) {
-                    arr.splice(i, 1)
-                    i--
-                }
+            if (flag) {
+                arr.splice(i, 1)
+                i--
             }
-            return arr
         }
+        return arr
     },
 
     xorWith: function (...args) {
@@ -974,7 +726,7 @@ var liwenkang = {
         var result = []
         if (typeof iteratee === "function") {
             for (var i = 0; i < array[0].length; i++) {
-                var func = iteratee
+                var func = liwenkang.identity(iteratee)
                 for (var j = 0; j < array.length; j++) {
                     func = func.bind(null, array[j][i])
                 }
@@ -988,11 +740,7 @@ var liwenkang = {
         if (Array.isArray(collection)) {
             var array = collection.slice()
             var dict = {}
-            if (typeof iteratee === "function") {
-                array = array.map(value => iteratee(value))
-            } else if (typeof  iteratee === "string") {
-                array = array.map(value => liwenkang.property(iteratee)(value))
-            }
+            array = array.map(value => liwenkang.identity(iteratee)(value))
             for (var i = 0; i < array.length; i++) {
                 if (dict[array[i]]) {
                     dict[array[i]]++
@@ -1006,57 +754,21 @@ var liwenkang = {
 
     every: function (collection, predicate) {
         if (Array.isArray(collection)) {
-            if (typeof predicate === "function") {
-                return collection.every(value => predicate(value))
-            } else if (typeof predicate === "string") {
-                return collection.every(value => liwenkang.property(predicate)(value))
-            } else if (Array.isArray(predicate)) {
-                return collection.every(value => liwenkang.matchesProperty(predicate)(value))
-            } else if (typeof predicate === "object") {
-                return collection.every(value => liwenkang.matches(predicate)(value))
-            }
+            return collection.every(value => liwenkang.identity(predicate)(value))
         }
     },
 
     filter: function (collection, predicate) {
         if (Array.isArray(collection)) {
-            if (typeof predicate === "function") {
-                return collection.filter(value => predicate(value))
-            } else if (typeof predicate === "string") {
-                return collection.filter(value => liwenkang.property(predicate)(value))
-            } else if (Array.isArray(predicate)) {
-                return collection.filter(value => liwenkang.matchesProperty(predicate)(value))
-            } else if (typeof predicate === "object") {
-                return collection.filter(value => liwenkang.matches(predicate)(value))
-            }
+            return collection.filter(value => liwenkang.identity(predicate)(value))
         }
     },
 
     find: function (collection, predicate, fromIndex = 0) {
         if (Array.isArray(collection)) {
-            if (typeof predicate === "function") {
-                for (var i = fromIndex; i < collection.length; i++) {
-                    if (predicate(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (typeof predicate === "string") {
-                for (var i = fromIndex; i < collection.length; i++) {
-                    if (liwenkang.property(predicate)(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (Array.isArray(predicate)) {
-                for (var i = fromIndex; i < collection.length; i++) {
-                    if (liwenkang.matchesProperty(predicate)(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (typeof predicate === "object") {
-                for (var i = fromIndex; i < collection.length; i++) {
-                    if (liwenkang.matches(predicate)(collection[i])) {
-                        return collection[i]
-                    }
+            for (var i = fromIndex; i < collection.length; i++) {
+                if (liwenkang.identity(predicate)(collection[i])) {
+                    return collection[i]
                 }
             }
         }
@@ -1064,29 +776,9 @@ var liwenkang = {
 
     findLast: function (collection, predicate, fromIndex = collection.length - 1) {
         if (Array.isArray(collection)) {
-            if (typeof predicate === "function") {
-                for (var i = fromIndex; i >= 0; i--) {
-                    if (predicate(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (typeof predicate === "string") {
-                for (var i = fromIndex; i >= 0; i--) {
-                    if (liwenkang.property(predicate)(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (Array.isArray(predicate)) {
-                for (var i = fromIndex; i >= 0; i--) {
-                    if (liwenkang.matchesProperty(predicate)(collection[i])) {
-                        return collection[i]
-                    }
-                }
-            } else if (typeof predicate === "object") {
-                for (var i = fromIndex; i >= 0; i--) {
-                    if (liwenkang.matches(predicate)(collection[i])) {
-                        return collection[i]
-                    }
+            for (var i = fromIndex; i >= 0; i--) {
+                if (liwenkang.identity(predicate)(collection[i])) {
+                    return collection[i]
                 }
             }
         }
@@ -1095,32 +787,28 @@ var liwenkang = {
     flatMap: function (collection, iteratee) {
         var result = []
         for (var i = 0; i < collection.length; i++) {
-            result[i] = iteratee(collection[i])
+            result[i] = liwenkang.identity(iteratee)(collection[i])
         }
         return liwenkang.flatten(result)
     },
 
     flatMapDeep: function (collection, iteratee) {
-        return liwenkang.flattenDeep(liwenkang.flatMap(collection, iteratee))
+        return liwenkang.flattenDeep(liwenkang.flatMap(collection, liwenkang.identity(iteratee)))
     },
 
     flatMapDepth: function (collection, iteratee, depth = 1) {
-        var result = liwenkang.flatMap(collection, iteratee)
+        var result = liwenkang.flatMap(collection, liwenkang.identity(iteratee))
         return liwenkang.flattenDepth(result, depth - 1)
     },
 
     forEach: function (collection, iteratee) {
         if (Array.isArray(collection)) {
-            if (typeof iteratee === "function") {
-                collection.forEach(value => {
-                    iteratee(value)
-                })
-            }
+            collection.forEach(value => {
+                liwenkang.identity(iteratee)(value)
+            })
         } else if (typeof collection === "object") {
-            if (typeof iteratee === "function") {
-                for (var key in collection) {
-                    iteratee(collection[key], key)
-                }
+            for (var key in collection) {
+                liwenkang.identity(iteratee)(collection[key], key)
             }
         }
         return collection
@@ -1128,16 +816,12 @@ var liwenkang = {
 
     forEachRight: function (collection, iteratee) {
         if (Array.isArray(collection)) {
-            if (typeof iteratee === "function") {
-                for (var i = collection.length - 1; i >= 0; i--) {
-                    iteratee(collection[i])
-                }
+            for (var i = collection.length - 1; i >= 0; i--) {
+                liwenkang.identity(iteratee)(collection[i])
             }
         } else if (typeof collection === "object") {
-            if (typeof iteratee === "function") {
-                for (var key in collection) {
-                    iteratee(collection[key], key)
-                }
+            for (var key in collection) {
+                liwenkang.identity(iteratee)(collection[key], key)
             }
         }
         return collection
@@ -1146,41 +830,15 @@ var liwenkang = {
     groupBy: function (collection, iteratee) {
         var dict = {}
         if (Array.isArray(collection)) {
-            if (typeof iteratee === "function") {
-                for (var i = 0; i < collection.length; i++) {
-                    if (dict[iteratee(collection[i])]) {
-                        dict[iteratee(collection[i])].push(collection[i])
-                    } else {
-                        dict[iteratee(collection[i])] = [collection[i]]
-                    }
-                }
-            } else if (typeof iteratee === "string") {
-                for (var i = 0; i < collection.length; i++) {
-                    if (dict[liwenkang.property(iteratee)(collection[i])]) {
-                        dict[liwenkang.property(iteratee)(collection[i])].push(collection[i])
-                    } else {
-                        dict[liwenkang.property(iteratee)(collection[i])] = [collection[i]]
-                    }
+            for (var i = 0; i < collection.length; i++) {
+                if (dict[liwenkang.identity(iteratee)(collection[i])]) {
+                    dict[liwenkang.identity(iteratee)(collection[i])].push(collection[i])
+                } else {
+                    dict[liwenkang.identity(iteratee)(collection[i])] = [collection[i]]
                 }
             }
             return dict
         }
-    },
-
-    identity: function (item) {
-        return item
-    },
-
-    sum: function (ary) {
-        return sumBy(ary, it => it)
-    },
-
-    sumBy: function (ary, iteratee) {
-        var sum = 0
-        for (var i = 0; i < ary.length; i++) {
-            sum += iteratee(ary[i])
-        }
-        return sum
     },
 
     includes: function (collection, value, fromIndex = 0) {
@@ -1211,7 +869,7 @@ var liwenkang = {
 
     get: function (object, path, defaultValue) {
         if (typeof path === "string") {
-            var array = path.split(/\[|\]\.|\./)
+            var array = path.split(/\]\[|\[|\]\.|\]|\./)
             for (var i = 0; i < array.length; i++) {
                 if (object[array[i]]) {
                     object = object[array[i]]
@@ -1266,35 +924,19 @@ var liwenkang = {
 
     keyBy: function (collection, iteratee) {
         var dict = {}
-        if (typeof iteratee === "function") {
-            for (var i = 0; i < collection.length; i++) {
-                dict[iteratee(collection[i])] = collection[i]
-            }
-        } else if (typeof iteratee === "string") {
-            for (var i = 0; i < collection.length; i++) {
-                dict[liwenkang.property(iteratee)(collection[i])] = collection[i]
-            }
+        for (var i = 0; i < collection.length; i++) {
+            dict[liwenkang.identity(iteratee)(collection[i])] = collection[i]
         }
         return dict
     },
 
     map: function (collection, iteratee) {
         if (Array.isArray(collection)) {
-            if (typeof iteratee === "function") {
-                return collection.map((value, key, collection) => iteratee(value, key, collection))
-            } else if (typeof iteratee === "string") {
-                return collection.map(value => liwenkang.get(value, iteratee))
-            }
+            return collection.map((value, key, collection) => liwenkang.identity(iteratee)(value, key, collection))
         } else if (typeof collection === "object") {
             var result = []
-            if (typeof iteratee === "function") {
-                for (var key in collection) {
-                    result.push(iteratee(collection[key], key, collection))
-                }
-            } else if (typeof iteratee === "string") {
-                for (var key in collection) {
-                    result.push(liwenkang.get(collection[key], iteratee))
-                }
+            for (var key in collection) {
+                result.push(liwenkang.identity(iteratee)(collection[key], key, collection))
             }
             return result
         }
@@ -1304,21 +946,21 @@ var liwenkang = {
         var i = 0
         var newArray = collection.slice()
         newArray.sort((a, b) => {
-            while (liwenkang.property(iteratees[i])(a) === liwenkang.property(iteratees[i])(b)) {
+            while (liwenkang.identity(iteratees[i])(a) === liwenkang.identity(iteratees[i])(b)) {
                 i++
             }
             var result
             if (orders[i] === "asc") {
-                if (typeof liwenkang.property(iteratees[i])(a) === "string") {
-                    result = liwenkang.property(iteratees[i])(a).charCodeAt() - liwenkang.property(iteratees[i])(b).charCodeAt()
-                } else if (typeof liwenkang.property(iteratees[i])(a) === "number") {
-                    result = liwenkang.property(iteratees[i])(a) - liwenkang.property(iteratees[i])(b)
+                if (typeof liwenkang.identity(iteratees[i])(a) === "string") {
+                    result = liwenkang.identity(iteratees[i])(a).charCodeAt() - liwenkang.identity(iteratees[i])(b).charCodeAt()
+                } else if (typeof liwenkang.identity(iteratees[i])(a) === "number") {
+                    result = liwenkang.identity(iteratees[i])(a) - liwenkang.identity(iteratees[i])(b)
                 }
             } else if (orders[i] === "desc") {
-                if (typeof liwenkang.property(iteratees[i])(a) === "string") {
-                    result = liwenkang.property(iteratees[i])(b).charCodeAt() - liwenkang.property(iteratees[i])(a).charCodeAt()
-                } else if (typeof liwenkang.property(iteratees[i])(a) === "number") {
-                    result = liwenkang.property(iteratees[i])(b) - liwenkang.property(iteratees[i])(a)
+                if (typeof liwenkang.identity(iteratees[i])(a) === "string") {
+                    result = liwenkang.identity(iteratees[i])(b).charCodeAt() - liwenkang.identity(iteratees[i])(a).charCodeAt()
+                } else if (typeof liwenkang.identity(iteratees[i])(a) === "number") {
+                    result = liwenkang.identity(iteratees[i])(b) - liwenkang.identity(iteratees[i])(a)
                 }
             }
             i = 0
@@ -1331,30 +973,10 @@ var liwenkang = {
         var result = [[], []]
         if (Array.isArray(collection)) {
             for (var i = 0; i < collection.length; i++) {
-                if (typeof predicate === "function") {
-                    if (predicate(collection[i])) {
-                        result[0].push(collection[i])
-                    } else {
-                        result[1].push(collection[i])
-                    }
-                } else if (typeof  predicate === "string") {
-                    if (liwenkang.property(predicate)(collection[i])) {
-                        result[0].push(collection[i])
-                    } else {
-                        result[1].push(collection[i])
-                    }
-                } else if (Array.isArray(predicate)) {
-                    if (liwenkang.matchesProperty(predicate)(collection[i])) {
-                        result[0].push(collection[i])
-                    } else {
-                        result[1].push(collection[i])
-                    }
-                } else if (typeof predicate === "object") {
-                    if (liwenkang.matches(predicate)(collection[i])) {
-                        result[0].push(collection[i])
-                    } else {
-                        result[1].push(collection[i])
-                    }
+                if (liwenkang.identity(predicate)(collection[i])) {
+                    result[0].push(collection[i])
+                } else {
+                    result[1].push(collection[i])
                 }
             }
         }
@@ -1365,11 +987,11 @@ var liwenkang = {
         if (Array.isArray(collection)) {
             if (accumulator) {
                 for (var i = 0; i < collection.length; i++) {
-                    accumulator = iteratee(accumulator, collection[i])
+                    accumulator = liwenkang.identity(iteratee)(accumulator, collection[i])
                 }
                 return accumulator
             } else {
-                return collection.reduce(iteratee)
+                return collection.reduce(liwenkang.identity(iteratee))
             }
         } else if (typeof collection === "object") {
             var flag = true
@@ -1379,12 +1001,12 @@ var liwenkang = {
                         accumulator = collection[key]
                         flag = false
                     } else {
-                        accumulator = iteratee(accumulator, collection[key], key)
+                        accumulator = liwenkang.identity(iteratee)(accumulator, collection[key], key)
                     }
                 }
             } else {
                 for (var key in collection) {
-                    accumulator = iteratee(accumulator, collection[key], key)
+                    accumulator = liwenkang.identity(iteratee)(accumulator, collection[key], key)
                 }
             }
             return accumulator
@@ -1394,7 +1016,7 @@ var liwenkang = {
     reduceRight: function (collection, iteratee, accumulator) {
         if (Array.isArray(collection)) {
             for (var i = collection.length - 1; i >= 0; i--) {
-                accumulator = iteratee(accumulator, collection[i])
+                accumulator = liwenkang.identity(iteratee)(accumulator, collection[i])
             }
             return accumulator
         }
@@ -1402,48 +1024,9 @@ var liwenkang = {
 
     reject: function (collection, predicate) {
         var result = []
-        if (typeof predicate === "function") {
+        if (Array.isArray(collection)) {
             for (var i = 0; i < collection.length; i++) {
-                if (!predicate(collection[i])) {
-                    result.push(collection[i])
-                }
-            }
-        }
-
-        if (Array.isArray(predicate)) {
-            for (var i = 0; i < collection.length; i++) {
-                var flag = true
-                for (var j = 0; j < predicate.length; j += 2) {
-                    var prop = predicate[j]
-                    var value = predicate[j + 1]
-                    if (collection[i][prop] !== value) {
-                        flag = false
-                    }
-                }
-                if (!flag) {
-                    result.push(collection[i])
-                }
-            }
-            return result
-        }
-
-        if (typeof predicate === "object") {
-            for (var i = 0; i < collection.length; i++) {
-                var flag = true
-                for (var prop in predicate) {
-                    if (collection[i][prop] !== predicate[prop]) {
-                        flag = false
-                    }
-                }
-                if (!flag) {
-                    result.push(collection[i])
-                }
-            }
-        }
-
-        if (typeof predicate === "string") {
-            for (var i = 0; i < collection.length; i++) {
-                if (!collection[i][predicate]) {
+                if (!liwenkang.identity(predicate)(collection[i])) {
                     result.push(collection[i])
                 }
             }
@@ -1488,44 +1071,23 @@ var liwenkang = {
     },
 
     some: function (collection, predicate) {
-        if (typeof predicate === "function") {
-            return collection.some(value => predicate(value))
-        } else if (typeof predicate === "string") {
-            return collection.some(value => liwenkang.property(predicate)(value))
-        } else if (Array.isArray(predicate)) {
-            return collection.some(value => liwenkang.matchesProperty(predicate)(value))
-        } else if (typeof predicate === "object") {
-            return collection.some(value => liwenkang.matches(predicate)(value))
-        }
+        return collection.some(value => liwenkang.identity(predicate)(value))
     },
 
     sortBy: function (collection, iteratees) {
         var i = 0
         var newArray = collection.slice()
         newArray.sort((a, b) => {
-            if (typeof iteratees[i] === "function") {
-                while (iteratees[i](a).localeCompare(iteratees[i](b)) === 0) {
-                    if (i + 1 < iteratees.length) {
-                        i++
-                    } else {
-                        break
-                    }
+            while (("" + liwenkang.identity(iteratees[i])(a)).localeCompare("" + liwenkang.identity(iteratees[i])(b)) === 0) {
+                if (i + 1 < iteratees.length) {
+                    i++
+                } else {
+                    break
                 }
-                var result = iteratees[i](a).localeCompare(iteratees[i](b))
-                i = 0
-                return result
-            } else if (typeof iteratees[i] === "string") {
-                while (("" + liwenkang.property(iteratees[i])(a)).localeCompare("" + liwenkang.property(iteratees[i])(b)) === 0) {
-                    if (i + 1 < iteratees.length) {
-                        i++
-                    } else {
-                        break
-                    }
-                }
-                var result = ("" + liwenkang.property(iteratees[i])(a)).localeCompare("" + liwenkang.property(iteratees[i])(b))
-                i = 0
-                return result
             }
+            var result = ("" + liwenkang.identity(iteratees[i])(a)).localeCompare("" + liwenkang.identity(iteratees[i])(b))
+            i = 0
+            return result
         })
         return newArray
     },
@@ -1639,6 +1201,9 @@ var liwenkang = {
         if (object === null) {
             return []
         }
+        if (typeof object === "string") {
+            return Array.from(object)
+        }
         var result = []
         for (var i in object) {
             result.push(object[i])
@@ -1667,6 +1232,7 @@ var liwenkang = {
             return result
         }
     },
+
 
     partial: function (func, partials) {
         // 没有考虑占位符
@@ -1819,7 +1385,7 @@ var liwenkang = {
     },
 
     isBoolean(value) {
-        return typeof value === "boolean"
+        return Object.prototype.toString.call(value) === '[object Boolean]'
     },
 
     isBuffer(value) {
@@ -1932,7 +1498,7 @@ var liwenkang = {
     isMatch(object, source) {
         if (typeof object === "object") {
             for (var key in source) {
-                if (source[key] !== object[key]) {
+                if (!liwenkang.isEqual(source[key], object[key])) {
                     return false
                 }
             }
@@ -1975,6 +1541,9 @@ var liwenkang = {
             return false
         }
         if (value === undefined) {
+            return true
+        }
+        if (typeof value === "function") {
             return true
         }
         return typeof value === "object"
@@ -2096,5 +1665,102 @@ var liwenkang = {
             return "-0"
         }
         return value.toString()
+    },
+
+    add(augend, addend) {
+        return augend + addend
+    },
+
+    ceil(number, precision = 0) {
+        number = number * Math.pow(10, precision)
+        return Math.ceil(number) / Math.pow(10, precision)
+    },
+
+    divide(dividend, divisor) {
+        return dividend / divisor
+    },
+
+    floor(number, precision = 0) {
+        number = number * Math.pow(10, precision)
+        return Math.floor(number) / Math.pow(10, precision)
+    },
+
+    max(array) {
+        if (array.length === 0) {
+            return undefined
+        }
+        return Math.max(...array)
+    },
+
+    maxBy(array, iteratee) {
+        var max = -Infinity
+        var result
+        for (var i = 0; i < array.length; i++) {
+            if (liwenkang.identity(iteratee)(array[i]) > max) {
+                max = liwenkang.identity(iteratee)(array[i])
+                result = array[i]
+            }
+        }
+        return result
+    },
+
+    mean(array) {
+        return liwenkang.sum(array) / array.length
+    },
+
+    meanBy(array, iteratee) {
+        var result = []
+        for (var i = 0; i < array.length; i++) {
+            result.push(liwenkang.identity(iteratee)(array[i]))
+        }
+        return liwenkang.mean(result)
+    },
+
+    min(array) {
+        if (array.length === 0) {
+            return undefined
+        }
+        return Math.min(...array)
+    },
+
+    minBy(array, iteratee) {
+        var min = Infinity
+        var result
+        for (var i = 0; i < array.length; i++) {
+            if (liwenkang.identity(iteratee)(array[i]) < min) {
+                min = liwenkang.identity(iteratee)(array[i])
+                result = array[i]
+            }
+        }
+        return result
+    },
+
+    multiply(multiplier, multiplicand) {
+        return multiplier * multiplicand
+    },
+
+    round(number, precision = 0) {
+        number = number * Math.pow(10, precision)
+        return Math.round(number) / Math.pow(10, precision)
+    },
+
+    subtract(minuend, subtrahend) {
+        return minuend - subtrahend
+    },
+
+    sum: function (ary) {
+        var result = 0
+        for (var i = 0; i < ary.length; i++) {
+            result += ary[i]
+        }
+        return result
+    },
+
+    sumBy: function (ary, iteratee) {
+        var sum = 0
+        for (var i = 0; i < ary.length; i++) {
+            sum += liwenkang.identity(iteratee)(ary[i])
+        }
+        return sum
     }
 }
