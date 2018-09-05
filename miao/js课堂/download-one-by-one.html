@@ -1,0 +1,62 @@
+<script>
+    const imgs = [
+        "https://drscdn.500px.org/photo/219418161/m%3D1170/v2?user_id=7012987&sig=df086ce4d67abf26f799ba253f6b584a227c84407c4c2719bda727a76a9929a2",
+        "https://drscdn.500px.org/photo/219417699/m%3D1170/v2?user_id=7012987&sig=2e960f54b7763ad5a4ac5f1f2fa5c67d3f98fc80a3bc215b248f67cfe955a215",
+        "https://placehold.it/300x200",
+        "https://placehold.it/400x200",
+        "https://placehold.it/500x200",
+        "https://placehold.it/600x200",
+        "https://placehold.it/700x200",
+        "https://placehold.it/800x200",
+        "https://placehold.it/900x200",
+        "https://placehold.it/1000x200"
+    ]
+
+    // 下载给定url的图片，下载完成后调用callback
+    function downloadImg(url, callback) {
+        var img = new Image()//document.create('img')
+        img.onload = function () {
+            callback(img)
+        }
+        img.onerror = function () {
+            callback(img)
+        }
+        img.src = url
+    }
+
+    function downloadOneByOne(imgs) {
+        for (var i = 0; i < imgs.length; i++) {
+            var xhr = new XMLHttpRequest()
+            xhr.open('GET', imgs[i], false)
+            xhr.addEventListener('load', () => {
+                console.log(xhr.src)
+            })
+            xhr.send(null)
+        }
+    }
+
+    // downloadOneByOne(imgs)
+
+    //两个一组，都下载完以后，下载下一组
+    function downloadTwoByTwo(imgs) {
+        for (var i = 0; i < imgs.length; i += 3) {
+            var xhr1 = new XMLHttpRequest()
+            var xhr2 = new XMLHttpRequest()
+            var xhr3 = new XMLHttpRequest()
+            xhr1.open('GET', imgs[i])
+            xhr2.open('GET', imgs[i + 1])
+            xhr3.open('GET', imgs[i + 2], false)
+            xhr1.send(null)
+            xhr2.send(null)
+            xhr3.send(null)
+        }
+    }
+
+    downloadTwoByTwo(imgs)
+
+
+    //最多同时下载4张，有任何一张下载完，就开始一张新的下载
+    function downloadMax4() {
+
+    }
+</script>

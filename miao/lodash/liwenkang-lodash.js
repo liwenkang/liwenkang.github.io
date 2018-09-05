@@ -3,35 +3,6 @@ const log = console.log.bind(console)
 // Array 部分的 zipObjectDeep 未完成
 // Lang 部分 clone 未完成
 var liwenkang = {
-    isEqual: function (value, other) {
-        var typeOne = typeof value
-        var typeTwo = typeof other
-        if (typeOne !== typeTwo) {
-            return false
-        }
-        if (typeOne === "object") {
-            if (Array.isArray(value) && Array.isArray(other)) {
-                return value.toString() === other.toString()
-            } else if (Array.isArray(value) === false && Array.isArray(other) === false) {
-                for (var key in value) {
-                    if (!liwenkang.isEqual(value[key], other[key])) {
-                        return false
-                    }
-                }
-                for (var key in other) {
-                    if (!liwenkang.isEqual(value[key], other[key])) {
-                        return false
-                    }
-                }
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return value === other
-        }
-    },
-
     property: function (string) {
         return obj => obj[string]
     },
@@ -1864,7 +1835,266 @@ var liwenkang = {
     },
 
     isEmpty(value) {
+        if (Array.isArray(value)) {
+            if (value.length === 0) {
+                return true
+            } else {
+                return false
+            }
+        } else if (typeof value === "object") {
+            var flag = true
+            for (var i in value) {
+                flag = false
+            }
+            return flag
+        } else if (value instanceof Map) {
+            return value.size === 0
+        } else if (value instanceof Set) {
+            return value.size === 0
+        } else {
+            return true
+        }
+    },
 
+    isEqual: function (value, other) {
+        var typeOne = typeof value
+        var typeTwo = typeof other
+        if (typeOne !== typeTwo) {
+            return false
+        }
+        if (typeOne === "object") {
+            if (Array.isArray(value) && Array.isArray(other)) {
+                return value.toString() === other.toString()
+            } else if (Array.isArray(value) === false && Array.isArray(other) === false) {
+                for (var key in value) {
+                    if (!liwenkang.isEqual(value[key], other[key])) {
+                        return false
+                    }
+                }
+                for (var key in other) {
+                    if (!liwenkang.isEqual(value[key], other[key])) {
+                        return false
+                    }
+                }
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return value === other
+        }
+    },
+
+    isEqualWith(value, other, customizer) {
+        if (Array.isArray(value) && Array.isArray(other)) {
+            for (var i = 0; i < value.length; i++) {
+                if (customizer(value[i], other[i]) === undefined) {
+                    if (!liwenkang.isEqual(value[i], other[i])) {
+                        return false
+                    }
+                } else if (!customizer(value[i], other[i])) {
+                    return false
+                }
+            }
+            return true
+        }
+    },
+
+    isError(value) {
+        return value instanceof Error
+    },
+
+    isFinite(value) {
+        return Number.isFinite(value)
+    },
+
+    isFunction(value) {
+        return value instanceof Function
+    },
+
+    isInteger(value) {
+        return Number.isInteger(value)
+    },
+
+    isLength(value) {
+        if (typeof value === "number" && liwenkang.isInteger(value)) {
+            if (value >= 0 && value < Number.MAX_SAFE_INTEGER) {
+                return true
+            }
+        }
+        return false
+    },
+
+    isMap(value) {
+        return value instanceof Map
+    },
+
+    isMatch(object, source) {
+        if (typeof object === "object") {
+            for (var key in source) {
+                if (source[key] !== object[key]) {
+                    return false
+                }
+            }
+            return true
+        }
+    },
+
+    isMatchWith(object, source, customizer) {
+
+    },
+
+    isNaN(value) {
+        if (value === undefined) {
+            return false
+        }
+        if (typeof value !== "number") {
+            return true
+        }
+        return isNaN(value)
+    },
+
+    isNative(value) {
+
+    },
+
+    isNil(value) {
+        return value === null || value === undefined
+    },
+
+    isNull(value) {
+        return value === null
+    },
+
+    isNumber(value) {
+        return typeof value === "number"
+    },
+
+    isObject(value) {
+        if (value === null) {
+            return false
+        }
+        if (value === undefined) {
+            return true
+        }
+        return typeof value === "object"
+    },
+
+    isObjectLike(value) {
+        if (value !== null && typeof value === "object") {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    isPlainObject(value) {
+        if (Object.prototype.constructor === value.constructor) {
+            return true
+        }
+        return typeof value === "object" && value.constructor === undefined
+    },
+
+    noop: undefined,
+
+    isRegExp(value) {
+        return value instanceof RegExp
+    },
+
+    isSafeInteger(value) {
+        return Number.isSafeInteger(value)
+    },
+
+    isSet(value) {
+        return value instanceof Set
+    },
+
+    isString(value) {
+        return typeof value === "string"
+    },
+
+    isSymbol(value) {
+        return typeof value === "symbol"
+    },
+
+    isTypedArray(value) {
+
+    },
+
+    isUndefined(value) {
+        return value === undefined
+    },
+
+    isWeakMap(value) {
+        return value instanceof WeakMap
+    },
+
+    isWeakSet(value) {
+        return value instanceof WeakSet
+    },
+
+    lt(value, other) {
+        return value < other
+    },
+
+    lte(value, other) {
+        return value <= other
+    },
+
+    toArray(value) {
+        if (typeof value === "object") {
+            var result = []
+            for (var key in value) {
+                result.push(value[key])
+            }
+            return result
+        }
+        if (value === null || value === undefined) {
+            return []
+        }
+        return Array.from(value)
+    },
+
+    toFinite(value) {
+        if (value === Infinity) {
+            return 1.7976931348623157e+308
+        }
+        return Number(value)
+    },
+
+    toInteger(value) {
+        return liwenkang.toFinite(Math.floor(value))
+    },
+
+    toLength(value) {
+
+    },
+
+    toNumber(value) {
+        return Number(value)
+    },
+
+    toPlainObject(value) {
+
+    },
+
+    toSafeInteger(value) {
+        if (value > Number.MAX_SAFE_INTEGER) {
+            return Number.MAX_SAFE_INTEGER
+        } else if (value < Number.MIN_SAFE_INTEGER) {
+            return Number.MIN_SAFE_INTEGER
+        } else {
+            return Math.floor(value)
+        }
+    },
+
+    toString(value) {
+        if (value === null || value === undefined) {
+            return ""
+        }
+        if (value === -0) {
+            return "-0"
+        }
+        return value.toString()
     }
 }
-
